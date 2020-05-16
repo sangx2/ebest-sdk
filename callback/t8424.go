@@ -2,15 +2,14 @@ package callback
 
 import (
 	"errors"
-
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // T8424 업종전체조회
 type T8424 struct {
-	InBlock  model.T8424InBlock
-	OutBlock []model.T8424OutBlock
+	InBlock  res.T8424InBlock
+	OutBlock []res.T8424OutBlock
 
 	TPS, LPP int
 
@@ -54,23 +53,26 @@ func (t T8424) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryReceiveSe
 	return t.ReceiveChartSearchRealDataChan
 }
 
-func (t *T8424) SetFieldData(e *wrapper.Ebest, resPath string, inBlock1 interface{}, inBlock2 interface{}) error {
+func (t *T8424) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "t8424.res")
 
-	i, ok := inBlock1.(model.T8424InBlock)
-	if !ok {
-		return errors.New("Invalid inBlock1")
+	if len(inBlocks) != 1 {
+		return errors.New("invalid inBlocks len")
 	}
 
-	t.InBlock = i
+	if i, ok := inBlocks[0].(res.T8424InBlock); !ok {
+		return errors.New("invalid inBlock1")
+	} else {
+		t.InBlock = i
+	}
 
 	e.SetFieldData("t8424InBlock", "gubun1", 0, t.InBlock.Gubun1)
 
 	return nil
 }
 
-func (t T8424) GetOutBlock() (interface{}, interface{}, interface{}, interface{}, interface{}, interface{}) {
-	return t.OutBlock, nil, nil, nil, nil, nil
+func (t T8424) GetOutBlocks() []interface{} {
+	return []interface{}{t.OutBlock}
 }
 
 func (t *T8424) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
@@ -79,7 +81,7 @@ func (t *T8424) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
 	t.OutBlock = nil
 
 	for i := 0; i < int(TRcount); i++ {
-		tr := model.T8424OutBlock{
+		tr := res.T8424OutBlock{
 			Hname:  e.GetFieldData("t8424OutBlock", "hname", i),
 			Upcode: e.GetFieldData("t8424OutBlock", "upcode", i)}
 		t.OutBlock = append(t.OutBlock, tr)

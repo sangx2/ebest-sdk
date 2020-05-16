@@ -2,15 +2,14 @@ package callback
 
 import (
 	"errors"
-
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // T1511 업종 현재가
 type T1511 struct {
-	InBlock  model.T1511InBlock
-	OutBlock model.T1511OutBlock
+	InBlock  res.T1511InBlock
+	OutBlock res.T1511OutBlock
 
 	TPS, LPP int
 
@@ -54,23 +53,26 @@ func (t T1511) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryReceiveSe
 	return t.ReceiveChartSearchRealDataChan
 }
 
-func (t *T1511) SetFieldData(e *wrapper.Ebest, resPath string, inBlock1 interface{}, inBlock2 interface{}) error {
+func (t *T1511) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "t1511.res")
 
-	i, ok := inBlock1.(model.T1511InBlock)
-	if !ok {
-		return errors.New("Invalid inBlock1")
+	if len(inBlocks) != 1 {
+		return errors.New("invalid inBlocks len")
 	}
 
-	t.InBlock = i
+	if i, ok := inBlocks[0].(res.T1511InBlock); !ok {
+		return errors.New("invalid inBlock1")
+	} else {
+		t.InBlock = i
+	}
 
 	e.SetFieldData("t1511InBlock", "upcode", 0, t.InBlock.Upcode)
 
 	return nil
 }
 
-func (t T1511) GetOutBlock() (interface{}, interface{}, interface{}, interface{}, interface{}, interface{}) {
-	return t.OutBlock, nil, nil, nil, nil, nil
+func (t T1511) GetOutBlocks() []interface{} {
+	return []interface{}{t.OutBlock}
 }
 
 func (t *T1511) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {

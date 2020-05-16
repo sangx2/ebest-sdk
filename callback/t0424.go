@@ -2,16 +2,16 @@ package callback
 
 import (
 	"errors"
-
-	"github.com/sangx2/ebest/model"
+	"fmt"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // T0424 주식 잔고2
 type T0424 struct {
-	InBlock   model.T0424InBlock
-	OutBlock  model.T0424OutBlock
-	OutBlock1 []model.T0424OutBlock1
+	InBlock   res.T0424InBlock
+	OutBlock  res.T0424OutBlock
+	OutBlock1 []res.T0424OutBlock1
 
 	TPS, LPP int
 
@@ -55,14 +55,18 @@ func (t T0424) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryReceiveSe
 	return t.ReceiveChartSearchRealDataChan
 }
 
-func (t *T0424) SetFieldData(e *wrapper.Ebest, resPath string, inBlock1 interface{}, inBlock2 interface{}) error {
+func (t *T0424) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "t0424.res")
 
-	i, ok := inBlock1.(model.T0424InBlock)
-	if !ok {
-		return errors.New("Invalid inBlock1")
+	if len(inBlocks) != 1 {
+		return errors.New("invalid inBlocks len")
 	}
-	t.InBlock = i
+
+	if i, ok := inBlocks[0].(res.T0424InBlock); !ok {
+		return errors.New(fmt.Sprintf("invalid inBlocks:%+v", inBlocks))
+	} else {
+		t.InBlock = i
+	}
 
 	e.SetFieldData("t0424InBlock", "accno", 0, t.InBlock.Accno)
 	e.SetFieldData("t0424InBlock", "passwd", 0, t.InBlock.Passwd)
@@ -75,8 +79,8 @@ func (t *T0424) SetFieldData(e *wrapper.Ebest, resPath string, inBlock1 interfac
 	return nil
 }
 
-func (t T0424) GetOutBlock() (interface{}, interface{}, interface{}, interface{}, interface{}, interface{}) {
-	return t.OutBlock, t.OutBlock1, nil, nil, nil, nil
+func (t T0424) GetOutBlocks() []interface{} {
+	return []interface{}{t.OutBlock, t.OutBlock1}
 }
 
 func (t *T0424) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
@@ -93,7 +97,7 @@ func (t *T0424) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
 	TRcount := e.GetBlockCount("t0424OutBlock1")
 
 	for i := 0; i < int(TRcount); i++ {
-		tr := model.T0424OutBlock1{
+		tr := res.T0424OutBlock1{
 			Expcode:    e.GetFieldData("t0424OutBlock1", "expcode", i),
 			Jangb:      e.GetFieldData("t0424OutBlock1", "jangb", i),
 			Janqty:     e.GetFieldData("t0424OutBlock1", "janqty", i),

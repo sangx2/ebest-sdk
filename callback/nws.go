@@ -2,16 +2,15 @@ package callback
 
 import (
 	"errors"
-
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // NWS 실시간 뉴스 제목 패킷
 type NWS struct {
-	InBlock model.NWSInBlock
+	InBlock res.NWSInBlock
 
-	OutBlock model.NWSOutBlock
+	OutBlock res.NWSOutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
 	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
@@ -35,13 +34,11 @@ func (n NWS) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
 func (n *NWS) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
 	e.ResFileName(resPath + "NWS.res")
 
-	i, ok := inBlock.(model.NWSInBlock)
-	if !ok {
+	if i, ok := inBlock.(res.NWSInBlock); !ok {
 		return errors.New("Invalid inBlock")
-
+	} else {
+		n.InBlock = i
 	}
-
-	n.InBlock = i
 
 	e.SetFieldData("InBlock", "nwcode", 0, n.InBlock.NWcode)
 

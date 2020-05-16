@@ -98,13 +98,13 @@ func (q *Query) Close() {
 }
 
 // SetInBlock 블록의 데이터(값)를 inblock으로 설정
-func (q Query) SetInBlock(inBlock1, inBlock2 interface{}) error {
-	return q.queryTrade.SetFieldData(q.ew, q.resPath, inBlock1, inBlock2)
+func (q Query) SetInBlock(inBlocks ...interface{}) error {
+	return q.queryTrade.SetFieldData(q.ew, q.resPath, inBlocks[:]...)
 }
 
 // GetOutBlock : 블록의 필드 데이터(값)를 outblock으로 취득
-func (q Query) GetOutBlock() (interface{}, interface{}, interface{}, interface{}, interface{}, interface{}) {
-	return q.queryTrade.GetOutBlock()
+func (q Query) GetOutBlocks() []interface{} {
+	return q.queryTrade.GetOutBlocks()
 }
 
 // Request 조회 TR을 요청

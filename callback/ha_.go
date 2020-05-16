@@ -2,15 +2,14 @@ package callback
 
 import (
 	"errors"
-
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // HA KOSDAQ호가잔량
 type HA struct {
-	InBlock  model.HAInBlock
-	OutBlock model.HAOutBlock
+	InBlock  res.HAInBlock
+	OutBlock res.HAOutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
 	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
@@ -34,11 +33,11 @@ func (h HA) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
 func (h *HA) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
 	e.ResFileName(resPath + "HA_.res")
 
-	i, ok := inBlock.(model.HAInBlock)
-	if !ok {
+	if i, ok := inBlock.(res.HAInBlock); !ok {
 		return errors.New("Invalid inBlock")
+	} else {
+		h.InBlock = i
 	}
-	h.InBlock = i
 
 	e.SetFieldData("InBlock", "shcode", 0, h.InBlock.Shcode)
 

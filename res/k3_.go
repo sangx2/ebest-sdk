@@ -1,4 +1,4 @@
-package model
+package res
 
 import (
 	"encoding/json"

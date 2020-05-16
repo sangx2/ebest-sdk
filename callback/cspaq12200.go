@@ -3,16 +3,16 @@ package callback
 import (
 	"errors"
 
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // CSPAQ12200 현물계좌 예수금/주문가능금액/총평가 조회
 type CSPAQ12200 struct {
-	InBlock1 model.CSPAQ12200InBlock1
+	InBlock1 res.CSPAQ12200InBlock1
 
-	OutBlock1 model.CSPAQ12200OutBlock1
-	OutBlock2 model.CSPAQ12200OutBlock2
+	OutBlock1 res.CSPAQ12200OutBlock1
+	OutBlock2 res.CSPAQ12200OutBlock2
 
 	TPS, LPP int
 
@@ -56,14 +56,18 @@ func (c CSPAQ12200) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryRece
 	return c.ReceiveChartSearchRealDataChan
 }
 
-func (c *CSPAQ12200) SetFieldData(e *wrapper.Ebest, resPath string, inBlock1 interface{}, inBlock2 interface{}) error {
+func (c *CSPAQ12200) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "CSPAQ12200.res")
 
-	i, ok := inBlock1.(model.CSPAQ12200InBlock1)
-	if !ok {
-		return errors.New("Invalid inBlock1")
+	if len(inBlocks) != 1 {
+		return errors.New("invalid inBlocks len")
 	}
-	c.InBlock1 = i
+
+	if i, ok := inBlocks[0].(res.CSPAQ12200InBlock1); !ok {
+		return errors.New("invalid inBlock")
+	} else {
+		c.InBlock1 = i
+	}
 
 	e.SetFieldData("CSPAQ12200InBlock1", "RecCnt", 0, c.InBlock1.RecCnt)
 	e.SetFieldData("CSPAQ12200InBlock1", "MgmtBrnNo", 0, c.InBlock1.MgmtBrnNo)
@@ -74,8 +78,8 @@ func (c *CSPAQ12200) SetFieldData(e *wrapper.Ebest, resPath string, inBlock1 int
 	return nil
 }
 
-func (c CSPAQ12200) GetOutBlock() (interface{}, interface{}, interface{}, interface{}, interface{}, interface{}) {
-	return c.OutBlock1, c.OutBlock2, nil, nil, nil, nil
+func (c CSPAQ12200) GetOutBlocks() []interface{} {
+	return []interface{}{c.OutBlock1, c.OutBlock2}
 }
 
 func (c *CSPAQ12200) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {

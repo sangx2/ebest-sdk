@@ -2,17 +2,16 @@ package callback
 
 import (
 	"errors"
-
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // T3320 FNG 요약
 type T3320 struct {
-	InBlock  model.T3320InBlock
-	
-	OutBlock model.T3320OutBlock
-	OutBlock1 model.T3320OutBlock1
+	InBlock res.T3320InBlock
+
+	OutBlock  res.T3320OutBlock
+	OutBlock1 res.T3320OutBlock1
 
 	TPS, LPP int
 
@@ -56,23 +55,26 @@ func (t T3320) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryReceiveSe
 	return t.ReceiveChartSearchRealDataChan
 }
 
-func (t *T3320) SetFieldData(e *wrapper.Ebest, resPath string, inBlock1 interface{}, inBlock2 interface{}) error {
+func (t *T3320) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "t3320.res")
 
-	i, ok := inBlock1.(model.T3320InBlock)
-	if !ok {
-		return errors.New("Invalid inBlock1")
+	if len(inBlocks) != 1 {
+		return errors.New("invalid inBlocks len")
 	}
 
-	t.InBlock = i
+	if i, ok := inBlocks[0].(res.T3320InBlock); !ok {
+		return errors.New("invalid inBlock1")
+	} else {
+		t.InBlock = i
+	}
 
 	e.SetFieldData("t3320InBlock", "gicode", 0, t.InBlock.Gicode)
 
 	return nil
 }
 
-func (t T3320) GetOutBlock() (interface{}, interface{}, interface{}, interface{}, interface{}, interface{}) {
-	return t.OutBlock, t.OutBlock1, nil, nil, nil, nil
+func (t T3320) GetOutBlocks() []interface{} {
+	return []interface{}{t.OutBlock, t.OutBlock1}
 }
 
 func (t *T3320) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {

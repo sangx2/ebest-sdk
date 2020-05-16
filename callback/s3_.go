@@ -2,16 +2,15 @@ package callback
 
 import (
 	"errors"
-
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // S3 KOSPI 체결
 type S3 struct {
-	InBlock model.S3InBlock
+	InBlock res.S3InBlock
 
-	OutBlock model.S3OutBlock
+	OutBlock res.S3OutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
 	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
@@ -35,11 +34,11 @@ func (s S3) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
 func (s *S3) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
 	e.ResFileName(resPath + "S3_.res")
 
-	i, ok := inBlock.(model.S3InBlock)
-	if !ok {
+	if i, ok := inBlock.(res.S3InBlock); !ok {
 		return errors.New("Invalid inBlock")
+	} else {
+		s.InBlock = i
 	}
-	s.InBlock = i
 
 	e.SetFieldData("InBlock", "shcode", 0, s.InBlock.Shcode)
 

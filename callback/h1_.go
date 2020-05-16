@@ -2,16 +2,15 @@ package callback
 
 import (
 	"errors"
-
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // H1 KOSPI호가잔량
 type H1 struct {
-	InBlock model.H1InBlock
+	InBlock res.H1InBlock
 
-	OutBlock model.H1OutBlock
+	OutBlock res.H1OutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
 	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
@@ -33,13 +32,13 @@ func (h H1) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
 }
 
 func (h *H1) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
-	e.ResFileName(resPath+"H1_.res")
+	e.ResFileName(resPath + "H1_.res")
 
-	i, ok := inBlock.(model.H1InBlock)
-	if !ok {
+	if i, ok := inBlock.(res.H1InBlock); !ok {
 		return errors.New("Invalid inBlock")
+	} else {
+		h.InBlock = i
 	}
-	h.InBlock = i
 
 	e.SetFieldData("InBlock", "shcode", 0, h.InBlock.Shcode)
 

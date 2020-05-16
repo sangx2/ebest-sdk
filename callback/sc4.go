@@ -1,13 +1,13 @@
 package callback
 
 import (
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // SC4 주식주문거부
 type SC4 struct {
-	OutBlock model.SC4OutBlock
+	OutBlock res.SC4OutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
 	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData

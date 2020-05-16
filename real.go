@@ -96,7 +96,7 @@ func (r *Real) Close() {
 }
 
 // SetInBlock 블록의 데이터(값)를 inblock으로 설정
-func (r Real) SetInBlock(inBlock interface{}) error {
+func (r *Real) SetInBlock(inBlock interface{}) error {
 	err := r.realTrade.SetFieldData(r.ew, r.resPath, inBlock)
 	if err != nil {
 		return err

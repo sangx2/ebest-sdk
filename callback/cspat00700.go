@@ -2,17 +2,16 @@ package callback
 
 import (
 	"errors"
-
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // CSPAT00700 현물 정정주문
 type CSPAT00700 struct {
-	InBlock1 model.CSPAT00700InBlock1
+	InBlock1 res.CSPAT00700InBlock1
 
-	OutBlock1 model.CSPAT00700OutBlock1
-	OutBlock2 model.CSPAT00700OutBlock2
+	OutBlock1 res.CSPAT00700OutBlock1
+	OutBlock2 res.CSPAT00700OutBlock2
 
 	TPS, LPP int
 
@@ -56,14 +55,18 @@ func (c CSPAT00700) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryRece
 	return c.ReceiveChartSearchRealDataChan
 }
 
-func (c *CSPAT00700) SetFieldData(e *wrapper.Ebest, resPath string, inBlock1 interface{}, inBlock2 interface{}) error {
+func (c *CSPAT00700) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "CSPAT00700.res")
 
-	i, ok := inBlock1.(model.CSPAT00700InBlock1)
-	if !ok {
-		return errors.New("Invalid inBlock1")
+	if len(inBlocks) != 1 {
+		return errors.New("invalid inBlocks len")
 	}
-	c.InBlock1 = i
+
+	if i, ok := inBlocks[0].(res.CSPAT00700InBlock1); !ok {
+		return errors.New("invalid inBlock1")
+	} else {
+		c.InBlock1 = i
+	}
 
 	e.SetFieldData("CSPAT00700InBlock1", "OrgOrdNo", 0, c.InBlock1.OrgOrdNo)
 	e.SetFieldData("CSPAT00700InBlock1", "AcntNo", 0, c.InBlock1.AcntNo)
@@ -77,8 +80,8 @@ func (c *CSPAT00700) SetFieldData(e *wrapper.Ebest, resPath string, inBlock1 int
 	return nil
 }
 
-func (c CSPAT00700) GetOutBlock() (interface{}, interface{}, interface{}, interface{}, interface{}, interface{}) {
-	return c.OutBlock1, c.OutBlock2, nil, nil, nil, nil
+func (c CSPAT00700) GetOutBlocks() []interface{} {
+	return []interface{}{c.OutBlock1, c.OutBlock2}
 }
 
 func (c *CSPAT00700) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {

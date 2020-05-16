@@ -1,4 +1,4 @@
-package model
+package res
 
 import (
 	"encoding/json"
@@ -6,12 +6,12 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// HA KOSDAQ호가잔량
-type HAInBlock struct {
+// H1 KOSPI호가잔량
+type H1InBlock struct {
 	Shcode string `json:"단축코드"`
 }
 
-type HAOutBlock struct {
+type H1OutBlock struct {
 	gorm.Model
 
 	Hotime      string `json:"호가시간"`
@@ -62,7 +62,7 @@ type HAOutBlock struct {
 	Allocgubun  string `json:"배분적용구분"`
 }
 
-func (h HAOutBlock) ToJSON() string {
+func (h H1OutBlock) ToJSON() string {
 	b, _ := json.Marshal(h)
 	return string(b)
 }

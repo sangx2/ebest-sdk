@@ -2,15 +2,14 @@ package callback
 
 import (
 	"errors"
-
-	"github.com/sangx2/ebest/model"
+	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
 // K3 KOSDAQ 체결
 type K3 struct {
-	InBlock  model.K3InBlock
-	OutBlock model.K3OutBlock
+	InBlock  res.K3InBlock
+	OutBlock res.K3OutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
 	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
@@ -34,11 +33,11 @@ func (k K3) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
 func (k *K3) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
 	e.ResFileName(resPath + "K3_.res")
 
-	i, ok := inBlock.(model.K3InBlock)
-	if !ok {
+	if i, ok := inBlock.(res.K3InBlock); !ok {
 		return errors.New("Invalid inBlock")
+	} else {
+		k.InBlock = i
 	}
-	k.InBlock = i
 
 	e.SetFieldData("InBlock", "shcode", 0, k.InBlock.Shcode)
 

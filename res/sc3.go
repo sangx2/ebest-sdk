@@ -1,4 +1,4 @@
-package model
+package res
 
 import (
 	"encoding/json"
@@ -6,8 +6,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// SC1 주식주문체결
-type SC1OutBlock struct {
+// SC3 주식주문취소
+type SC3OutBlock struct {
 	gorm.Model
 
 	Lineseq          string `json:"라인일련번호"`
@@ -142,7 +142,7 @@ type SC1OutBlock struct {
 	Ruseableamt      string `json:"재사용가능금액"`
 }
 
-func (s *SC1OutBlock) ToJSON() string {
+func (s *SC3OutBlock) ToJSON() string {
 	b, _ := json.Marshal(s)
 	return string(b)
 }

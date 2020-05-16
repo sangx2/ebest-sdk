@@ -13,8 +13,8 @@ type QueryTrade interface {
 	GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryReceiveSearchRealData
 
 	// in/out block
-	SetFieldData(ebest *wrapper.Ebest, resPath string, inblock1 interface{}, inblock2 interface{}) error
-	GetOutBlock() (interface{}, interface{}, interface{}, interface{}, interface{}, interface{})
+	SetFieldData(eBest *wrapper.Ebest, resPath string, inBlocks ...interface{}) error
+	GetOutBlocks() []interface{}
 
 	// callback func
 	ReceivedData(*wrapper.Ebest, wrapper.XaQueryReceiveData)
