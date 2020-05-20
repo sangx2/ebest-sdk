@@ -12,9 +12,9 @@ type T8436InBlock struct {
 }
 
 type T8436OutBlock struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
-	Hname      string `json:"업종명"`
+	Hname      string `json:"종목명"`
 	Shcode     string `json:"단축코드"`
 	Expcode    string `json:"확장코드"`
 	Etfgubun   string `json:"ETF구분"`
