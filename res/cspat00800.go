@@ -16,7 +16,7 @@ type CSPAT00800InBlock1 struct {
 }
 
 type CSPAT00800OutBlock1 struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	RecCnt     string `json:"레코드갯수"`
 	OrgOrdNo   string `json:"원주문번호"`
@@ -40,7 +40,7 @@ func (c CSPAT00800OutBlock1) ToJSON() string {
 }
 
 type CSPAT00800OutBlock2 struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	RecCnt            string `json:"레코드갯수"`
 	OrdNo             string `json:"주문번호"`

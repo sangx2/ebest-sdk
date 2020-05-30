@@ -12,7 +12,7 @@ type T3320InBlock struct {
 }
 
 type T3320OutBlock struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	Upgubunnm    string `json:"업종구분명"`
 	Sijangcd     string `json:"시장구분"`
@@ -43,6 +43,8 @@ func (t T3320OutBlock) ToJSON() string {
 }
 
 type T3320OutBlock1 struct {
+	gorm.Model `json:"-"`
+
 	Gicode   string `json:"기업코드"`
 	Gsym     string `json:결산년월"`
 	Gsgb     string `json:"결산구분"`

@@ -8,7 +8,7 @@ import (
 
 // SC1 주식주문체결
 type SC1OutBlock struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	Lineseq          string `json:"라인일련번호"`
 	Accno            string `json:"계좌번호"`

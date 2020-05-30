@@ -12,7 +12,7 @@ type HAInBlock struct {
 }
 
 type HAOutBlock struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	Hotime      string `json:"호가시간"`
 	Offerho1    string `json:"매도호가1"`

@@ -16,7 +16,7 @@ type CSPAQ12200InBlock1 struct {
 }
 
 type CSPAQ12200OutBlock1 struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	RecCnt    string `json:"레코드갯수"`
 	MgmtBrnNo string `json:"관리지점번호"`
@@ -31,7 +31,7 @@ func (c CSPAQ12200OutBlock1) ToJSON() string {
 }
 
 type CSPAQ12200OutBlock2 struct {
-	gorm.Model
+	gorm.Model  `json:"-"`
 
 	RecCnt                 string `json:"레코드갯수"`
 	BrnNm                  string `json:"지점명"`

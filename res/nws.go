@@ -12,7 +12,7 @@ type NWSInBlock struct {
 }
 
 type NWSOutBlock struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	Date      string `json:"날짜"`
 	Time      string `json:"시간"`

@@ -12,7 +12,7 @@ type K3InBlock struct {
 }
 
 type K3OutBlock struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	Chetime    string `json:"체결시간"`
 	Sign       string `json:"전일대비구분 {1:상한 2:상승 3:보합 4:하한 5:하락}"`

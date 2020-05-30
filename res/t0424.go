@@ -18,7 +18,7 @@ type T0424InBlock struct {
 }
 
 type T0424OutBlock struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	Sunamt     string `json:"순추정자산"`
 	Dtsunik    string `json:"실현손익"`
@@ -35,7 +35,7 @@ func (t T0424OutBlock) ToJSON() string {
 }
 
 type T0424OutBlock1 struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	Expcode    string `json:"종목번호"`
 	Jangb      string `json:"잔고구분"`

@@ -12,7 +12,7 @@ type T1101InBlock struct {
 }
 
 type T1101OutBlock struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	Hname         string `json:"한글명"`
 	Price         string `json:"현재가"`

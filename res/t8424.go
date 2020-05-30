@@ -12,7 +12,7 @@ type T8424InBlock struct {
 }
 
 type T8424OutBlock struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 
 	Hname  string `json:"업종명"`
 	Upcode string `json:"업종코드"`
