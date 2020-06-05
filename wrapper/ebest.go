@@ -206,18 +206,16 @@ func getTypeInfo(ptypeif *uintptr) uintptr {
 }
 
 func getIDsOfNames(args *uintptr) uint32 {
-	/*
-		p := (*[6]int32)(unsafe.Pointer(args))
-		//this := (*ole.IDispatch)(unsafe.Pointer(uintptr(p[0])))
-		//iid := (*ole.GUID)(unsafe.Pointer(uintptr(p[1])))
-		//wnames := *(*[]*uint16)(unsafe.Pointer(uintptr(p[2])))
-		namelen := int(uintptr(p[3]))
-		//lcid := int(uintptr(p[4]))
-		pdisp := *(*[]int32)(unsafe.Pointer(uintptr(p[5])))
-		for n := 0; n < namelen; n++ {
-			pdisp[n] = int32(n)
-		}
-	*/
+	p := (*[6]int32)(unsafe.Pointer(args))
+	//this := (*ole.IDispatch)(unsafe.Pointer(uintptr(p[0])))
+	//iid := (*ole.GUID)(unsafe.Pointer(uintptr(p[1])))
+	//wnames := *(*[]*uint16)(unsafe.Pointer(uintptr(p[2])))
+	namelen := int(uintptr(p[3]))
+	//lcid := int(uintptr(p[4]))
+	pdisp := *(*[]int32)(unsafe.Pointer(uintptr(p[5])))
+	for n := 0; n < namelen; n++ {
+		pdisp[n] = int32(n)
+	}
 	return ole.S_OK
 }
 
