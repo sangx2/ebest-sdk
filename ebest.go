@@ -83,6 +83,7 @@ func (e *Ebest) Disconnect() {
 	e.ew.DisconnectServer()
 
 	e.done <- true
+	close(e.done)
 
 	e.wg.Wait()
 }
@@ -148,6 +149,7 @@ func (e *Ebest) createObject(p uintptr) uintptr {
 	e.ew.BindEvent(e.cb)
 
 	e.create <- true
+	close(e.create)
 
 	for {
 		pumpWaitingMessages()

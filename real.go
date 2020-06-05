@@ -91,6 +91,7 @@ func (r *Real) Close() {
 	r.ew.UnAdviseRealData()
 
 	r.done <- true
+	close(r.done)
 
 	r.wg.Wait()
 }
@@ -137,6 +138,7 @@ func (r *Real) createObject(p uintptr) uintptr {
 	r.ew.BindEvent(r.realTrade)
 
 	r.create <- true
+	close(r.create)
 
 	for {
 		pumpWaitingMessages()

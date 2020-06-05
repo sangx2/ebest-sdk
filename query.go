@@ -93,6 +93,7 @@ func NewQuery(resPath, resName string) *Query {
 // Close Query 객체 종료
 func (q *Query) Close() {
 	q.done <- true
+	close(q.done)
 
 	q.wg.Wait()
 }
@@ -148,6 +149,7 @@ func (q *Query) createObject(p uintptr) uintptr {
 	q.ew.BindEvent(q.queryTrade)
 
 	q.create <- true
+	close(q.create)
 
 	for {
 		pumpWaitingMessages()
