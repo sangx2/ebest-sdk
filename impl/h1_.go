@@ -1,4 +1,4 @@
-package callback
+package impl
 
 import (
 	"errors"

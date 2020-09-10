@@ -7,7 +7,7 @@ import (
 	"time"
 
 	ole "github.com/go-ole/go-ole"
-	"github.com/sangx2/ebest/callback"
+	"github.com/sangx2/ebest/impl"
 	"github.com/sangx2/ebest/interfaces"
 	"github.com/sangx2/ebest/wrapper"
 )
@@ -32,20 +32,20 @@ type Ebest struct {
 	srvIP   string
 	srvPort int
 
-	log interfaces.Logger
+	resPath string
 
-	cb *callback.Session
+	cb *impl.Session
 	ew *wrapper.Ebest
 
-	create chan bool
-	done   chan bool
-	wg     sync.WaitGroup
+	createChan chan error
+	doneChan   chan bool
+	wg         sync.WaitGroup
 }
 
-func NewEbest(id, passwd, certPasswd, srvIP string, srvPort int, logger interfaces.Logger) *Ebest {
-	e := &Ebest{id: id, passwd: passwd, certPasswd: certPasswd, srvIP: srvIP, srvPort: srvPort, log: logger,
-		cb: callback.NewSession(), ew: new(wrapper.Ebest),
-		create: make(chan bool, 1), done: make(chan bool, 1)}
+func NewEbest(id, passwd, certPasswd, srvIP string, srvPort int, resPath string) *Ebest {
+	e := &Ebest{id: id, passwd: passwd, certPasswd: certPasswd, srvIP: srvIP, srvPort: srvPort,
+		cb: impl.NewSession(), ew: new(wrapper.Ebest), resPath: resPath,
+		createChan: make(chan error, 1), doneChan: make(chan bool, 1)}
 
 	e.wg.Add(1)
 	ret, _ := createThread(e.createObject, 0)
@@ -56,15 +56,73 @@ func NewEbest(id, passwd, certPasswd, srvIP string, srvPort int, logger interfac
 	return e
 }
 
+func (e *Ebest) CreateQuery(resName string) *Query {
+	var trade interfaces.QueryTrade
+
+	switch resName {
+	case CSPAQ12200:
+		trade = impl.NewCSPAQ12200()
+	case CSPAT00600:
+		trade = impl.NewCSPAT00600()
+	case CSPAT00700:
+		trade = impl.NewCSPAT00700()
+	case CSPAT00800:
+		trade = impl.NewCSPAT00800()
+	case T1101:
+		trade = impl.NewT1101()
+	case T1511:
+		trade = impl.NewT1511()
+	case T3320:
+		trade = impl.NewT3320()
+	case T0424:
+		trade = impl.NewT0424()
+	case T8424:
+		trade = impl.NewT8424()
+	case T8436:
+		trade = impl.NewT8436()
+	default:
+		return nil
+	}
+
+	return NewQuery(e.resPath, trade)
+}
+
+func (e *Ebest) CreateReal(resName string) *Real {
+	var trade interfaces.RealTrade
+
+	switch resName {
+	case H1:
+		trade = impl.NewH1()
+	case HA:
+		trade = impl.NewHA()
+	case K3:
+		trade = impl.NewK3()
+	case S3:
+		trade = impl.NewS3()
+	case NWS:
+		trade = impl.NewNWS()
+	case SC0:
+		trade = impl.NewSC0()
+	case SC1:
+		trade = impl.NewSC1()
+	case SC2:
+		trade = impl.NewSC2()
+	case SC3:
+		trade = impl.NewSC3()
+	case SC4:
+		trade = impl.NewSC4()
+	default:
+		return nil
+	}
+
+	return NewReal(e.resPath, trade)
+}
+
 // Connect 서버에 연결
-func (e Ebest) Connect() {
-	for {
-		select {
-		case <-e.create:
-			return
-		default:
-			time.Sleep(DELAY_CREATE_THREAD)
-		}
+func (e Ebest) Connect() error {
+	select {
+	case e := <-e.createChan:
+		return e
 	}
 }
 
@@ -74,7 +132,6 @@ func (e Ebest) Login() error {
 	if sessionLogin.Code != "0000" {
 		return errors.New(sessionLogin.Msg)
 	}
-
 	return nil
 }
 
@@ -82,8 +139,8 @@ func (e Ebest) Login() error {
 func (e *Ebest) Disconnect() {
 	e.ew.DisconnectServer()
 
-	e.done <- true
-	close(e.done)
+	e.doneChan <- true
+	close(e.doneChan)
 
 	e.wg.Wait()
 }
@@ -121,41 +178,36 @@ func (e Ebest) GetErrorMessage(code int) string {
 	return e.ew.GetErrorMessage(code)
 }
 
+// createObject Ebest 객체 생성시 등록될 callback 함수
 func (e *Ebest) createObject(p uintptr) uintptr {
 	ole.CoInitializeEx(0, ole.COINIT_APARTMENTTHREADED)
 
 	e.ew.Create("XASession")
 
 	if !e.ew.ConnectServer(e.srvIP, e.srvPort) {
-		if e.log != nil {
-			e.log.Error(fmt.Sprintf("%s:%s", "s.ew.ConnectServer", e.ew.GetErrorMessage(int(e.ew.GetLastError()))))
-		}
-	} else {
-		if e.log != nil {
-			e.log.Info("ConnectServer ok")
-		}
+		e.createChan <- fmt.Errorf("%s:%s", "s.ew.ConnectServer", e.ew.GetErrorMessage(int(e.ew.GetLastError())))
+		close(e.createChan)
+		e.wg.Done()
+		return 0
 	}
 
 	if !e.ew.Login(e.id, e.passwd, e.certPasswd) {
-		if e.log != nil {
-			e.log.Error(fmt.Sprintf("%s:%s", "s.ew.Login", e.ew.GetErrorMessage(int(e.ew.GetLastError()))))
-		}
-	} else {
-		if e.log != nil {
-			e.log.Info("Login ok")
-		}
+		e.createChan <- fmt.Errorf("%s:%s", "s.ew.Login", e.ew.GetErrorMessage(int(e.ew.GetLastError())))
+		close(e.createChan)
+		e.wg.Done()
+		return 0
 	}
 
 	e.ew.BindEvent(e.cb)
 
-	e.create <- true
-	close(e.create)
+	e.createChan <- nil
+	close(e.createChan)
 
 	for {
 		pumpWaitingMessages()
 
 		select {
-		case <-e.done:
+		case <-e.doneChan:
 			// 쓰레드가 종료 되기 전에 메인 쓰레드가 먼처 종료되므로 defer로 처리 불가
 			e.ew.UnBindEvent()
 
@@ -168,7 +220,5 @@ func (e *Ebest) createObject(p uintptr) uintptr {
 		default:
 			time.Sleep(DELAY_PUMPWAITINGMESSAGES)
 		}
-
 	}
-
 }

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	ole "github.com/go-ole/go-ole"
-	"github.com/sangx2/ebest/callback"
 	"github.com/sangx2/ebest/interfaces"
 	"github.com/sangx2/ebest/wrapper"
 )
@@ -39,34 +38,7 @@ type Query struct {
 }
 
 // NewQuery Query 객체 생성
-func NewQuery(resPath, resName string) *Query {
-	var trade interfaces.QueryTrade
-
-	switch resName {
-	case CSPAQ12200:
-		trade = callback.NewCSPAQ12200()
-	case CSPAT00600:
-		trade = callback.NewCSPAT00600()
-	case CSPAT00700:
-		trade = callback.NewCSPAT00700()
-	case CSPAT00800:
-		trade = callback.NewCSPAT00800()
-	case T1101:
-		trade = callback.NewT1101()
-	case T1511:
-		trade = callback.NewT1511()
-	case T3320:
-		trade = callback.NewT3320()
-	case T0424:
-		trade = callback.NewT0424()
-	case T8424:
-		trade = callback.NewT8424()
-	case T8436:
-		trade = callback.NewT8436()
-	default:
-		return nil
-	}
-
+func NewQuery(resPath string, trade interfaces.QueryTrade) *Query {
 	q := &Query{
 		resPath: resPath,
 		TPS:     trade.GetTPS(), LPP: trade.GetLPP(),
@@ -164,7 +136,6 @@ func (q *Query) createObject(p uintptr) uintptr {
 			ole.CoUninitialize()
 
 			q.wg.Done()
-
 			return 0
 		default:
 			time.Sleep(DELAY_PUMPWAITINGMESSAGES)

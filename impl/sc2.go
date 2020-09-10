@@ -1,44 +1,44 @@
-package callback
+package impl
 
 import (
 	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
 )
 
-// SC3 주식주문취소
-type SC3 struct {
-	OutBlock res.SC3OutBlock
+// SC2 주식주문정정
+type SC2 struct {
+	OutBlock res.SC2OutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
 	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
 }
 
-func NewSC3() *SC3 {
-	return &SC3{
+func NewSC2() *SC2 {
+	return &SC2{
 		ReceiveRealDataChan: make(chan wrapper.XaRealReceiveRealData, 1),
 		ReceiveLinkDataChan: make(chan wrapper.XaRealRecieveLinkData, 1),
 	}
 }
 
-func (s SC3) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
+func (s SC2) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
 	return s.ReceiveRealDataChan
 }
 
-func (s SC3) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
+func (s SC2) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
 	return s.ReceiveLinkDataChan
 }
 
-func (s *SC3) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
-	e.ResFileName(resPath + "SC3.res")
+func (s *SC2) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
+	e.ResFileName(resPath + "SC2.res")
 
 	return nil
 }
 
-func (s SC3) GetOutBlock() interface{} {
+func (s SC2) GetOutBlock() interface{} {
 	return s.OutBlock
 }
 
-func (s *SC3) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData) {
+func (s *SC2) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData) {
 	s.OutBlock.Lineseq = e.GetFieldData("OutBlock", "lineseq", 0)
 	s.OutBlock.Accno = e.GetFieldData("OutBlock", "accno", 0)
 	s.OutBlock.User = e.GetFieldData("OutBlock", "user", 0)
@@ -173,6 +173,6 @@ func (s *SC3) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData
 	s.ReceiveRealDataChan <- x
 }
 
-func (s SC3) ReceivedLinkData(ew *wrapper.Ebest, x wrapper.XaRealRecieveLinkData) {
+func (s SC2) ReceivedLinkData(ew *wrapper.Ebest, x wrapper.XaRealRecieveLinkData) {
 	s.ReceiveLinkDataChan <- x
 }
