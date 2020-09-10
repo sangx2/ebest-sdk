@@ -1,4 +1,4 @@
-package callback
+package impl
 
 import (
 	"github.com/sangx2/ebest/res"

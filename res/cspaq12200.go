@@ -31,7 +31,7 @@ func (c CSPAQ12200OutBlock1) ToJSON() string {
 }
 
 type CSPAQ12200OutBlock2 struct {
-	gorm.Model  `json:"-"`
+	gorm.Model `json:"-"`
 
 	RecCnt                 string `json:"레코드갯수"`
 	BrnNm                  string `json:"지점명"`

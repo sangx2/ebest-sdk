@@ -12,13 +12,16 @@ import (
 func TestEbest(t *testing.T) {
 	// fix me
 	resPath := "C:\\eBEST\\xingAPI\\Res\\"
-	eBest := NewEbest("", "", "", SERVER_VIRTUAL, PORT, nil)
+	eBest := NewEbest("", "", "", SERVER_VIRTUAL, PORT, resPath)
 	if eBest == nil {
 		t.Error("NewEbest error")
+		return
 	}
 
-	eBest.Connect()
-	defer eBest.Disconnect()
+	if e := eBest.Connect(); e != nil {
+		t.Errorf("Login error : %s", e)
+		return
+	}
 
 	if e := eBest.Login(); e != nil {
 		t.Errorf("Login error : %s", e)
@@ -32,7 +35,7 @@ func TestEbest(t *testing.T) {
 	t.Logf("GetAccountNickName : %s", eBest.GetAccountNickName(accounts[0]))
 
 	// Query
-	t0424 := NewQuery(resPath, T0424)
+	t0424 := eBest.CreateQuery(T0424)
 	if t0424 == nil {
 		t.Error("NewQuery(\"주식 잔고2\") error")
 		return
@@ -71,10 +74,8 @@ func TestEbest(t *testing.T) {
 		t.Logf("T0424Outblock1 : %+v", t0424OutBlock1s)
 	}
 
-	t0424.Close()
-
 	// Real
-	news := NewReal(resPath, NWS)
+	news := eBest.CreateReal(NWS)
 	if news == nil {
 		t.Error("NewReal(\"실시간 뉴스 제목 패킷\") error")
 		return
@@ -101,9 +102,11 @@ func TestEbest(t *testing.T) {
 			t.Logf("NWSOutBlock : %+v", newsOut)
 		}
 	case <-interruptChan:
-		news.Stop("NWS001")
-
-		news.Close()
 		break
 	}
+
+	t0424.Close()
+	news.Close()
+
+	eBest.Disconnect()
 }

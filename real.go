@@ -5,7 +5,6 @@ import (
 	"time"
 
 	ole "github.com/go-ole/go-ole"
-	"github.com/sangx2/ebest/callback"
 	"github.com/sangx2/ebest/interfaces"
 	"github.com/sangx2/ebest/wrapper"
 )
@@ -36,34 +35,7 @@ type Real struct {
 }
 
 // NewReal Real 객체 생성
-func NewReal(resPath, resName string) *Real {
-	var trade interfaces.RealTrade
-
-	switch resName {
-	case H1:
-		trade = callback.NewH1()
-	case HA:
-		trade = callback.NewHA()
-	case K3:
-		trade = callback.NewK3()
-	case S3:
-		trade = callback.NewS3()
-	case NWS:
-		trade = callback.NewNWS()
-	case SC0:
-		trade = callback.NewSC0()
-	case SC1:
-		trade = callback.NewSC1()
-	case SC2:
-		trade = callback.NewSC2()
-	case SC3:
-		trade = callback.NewSC3()
-	case SC4:
-		trade = callback.NewSC4()
-	default:
-		return nil
-	}
-
+func NewReal(resPath string, trade interfaces.RealTrade) *Real {
 	r := &Real{
 		resPath:   resPath,
 		realTrade: trade, ew: new(wrapper.Ebest),
