@@ -120,9 +120,13 @@ func (e *Ebest) CreateReal(resName string) *Real {
 
 // Connect 서버에 연결
 func (e Ebest) Connect() error {
-	select {
-	case e := <-e.createChan:
-		return e
+	for {
+		select {
+		case e := <-e.createChan:
+			return e
+		default:
+			time.Sleep(DELAY_CREATE_THREAD)
+		}
 	}
 }
 
