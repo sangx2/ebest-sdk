@@ -9,25 +9,11 @@ import (
 	"github.com/sangx2/ebest/wrapper"
 )
 
-const (
-	// Real 객체 이름 목록
-	H1  = "KOSPI호가잔량"
-	HA  = "KOSDAQ호가잔량"
-	K3  = "KOSDAQ 체결"
-	S3  = "KOSPI 체결"
-	NWS = "실시간 뉴스 제목 패킷"
-	SC0 = "주식주문접수"
-	SC1 = "주식주문체결"
-	SC2 = "주식주문정정"
-	SC3 = "주식주문취소"
-	SC4 = "주식주문거부"
-)
-
 type Real struct {
 	resPath string
 
 	realTrade interfaces.RealTrade
-	ew        *wrapper.Ebest
+	ew        *wrapper.EBestWrapper
 
 	create chan bool
 	done   chan bool
@@ -37,8 +23,10 @@ type Real struct {
 // NewReal Real 객체 생성
 func NewReal(resPath string, trade interfaces.RealTrade) *Real {
 	r := &Real{
-		resPath:   resPath,
-		realTrade: trade, ew: new(wrapper.Ebest),
+		resPath: resPath,
+
+		realTrade: trade, ew: new(wrapper.EBestWrapper),
+
 		create: make(chan bool, 1), done: make(chan bool, 1),
 	}
 
@@ -53,7 +41,7 @@ func NewReal(resPath string, trade interfaces.RealTrade) *Real {
 		case <-r.create:
 			return r
 		default:
-			time.Sleep(DELAY_CREATE_THREAD)
+			time.Sleep(DelayCreateThread)
 		}
 	}
 }
@@ -88,7 +76,7 @@ func (r Real) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
 }
 
 // GetReceivedLinkDataChan HTS로부터 연동 정보를 수신 했을 때 발생
-func (r Real) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
+func (r Real) GetReceivedLinkDataChan() chan wrapper.XaRealReceiveLinkData {
 	return r.realTrade.GetReceivedLinkDataChan()
 }
 
@@ -103,11 +91,16 @@ func (r Real) Stop(key string) {
 }
 
 func (r *Real) createObject(p uintptr) uintptr {
+	defer r.wg.Done()
+
 	ole.CoInitializeEx(0, ole.COINIT_APARTMENTTHREADED)
+	defer ole.CoUninitialize()
 
 	r.ew.Create("XAReal")
+	defer r.ew.Release()
 
 	r.ew.BindEvent(r.realTrade)
+	defer r.ew.UnBindEvent()
 
 	r.create <- true
 	close(r.create)
@@ -117,18 +110,9 @@ func (r *Real) createObject(p uintptr) uintptr {
 
 		select {
 		case <-r.done:
-			// 쓰레드가 종료 되기 전에 메인 쓰레드가 먼처 종료되므로 defer로 처리 불가
-			r.ew.UnBindEvent()
-
-			r.ew.Release()
-
-			ole.CoUninitialize()
-
-			r.wg.Done()
-
 			return 0
 		default:
-			time.Sleep(DELAY_PUMPWAITINGMESSAGES)
+			time.Sleep(DelayPumpWaitingMessages)
 		}
 	}
 }

@@ -33,35 +33,35 @@ const (
 )
 
 type callbackSession interface {
-	ReceivedLogin(*Ebest, XaSessionLogin)
-	ReceivedLogout(*Ebest)
-	ReceivedDisConnect(*Ebest)
+	ReceivedLogin(*EBestWrapper, XaSessionLogin)
+	ReceivedLogout(*EBestWrapper)
+	ReceivedDisConnect(*EBestWrapper)
 }
 
 type callbackQuery interface {
-	ReceivedData(*Ebest, XaQueryReceiveData)
-	ReceivedMessage(*Ebest, XaQueryReceiveMessage)
-	ReceivedChartRealData(*Ebest, XaQueryReceiveChartRealData)
-	ReceivedSearchRealData(*Ebest, XaQueryReceiveSearchRealData)
+	ReceivedData(*EBestWrapper, XaQueryReceiveData)
+	ReceivedMessage(*EBestWrapper, XaQueryReceiveMessage)
+	ReceivedChartRealData(*EBestWrapper, XaQueryReceiveChartRealData)
+	ReceivedSearchRealData(*EBestWrapper, XaQueryReceiveSearchRealData)
 }
 
 type callbackReal interface {
-	ReceivedRealData(*Ebest, XaRealReceiveRealData)
-	ReceivedLinkData(*Ebest, XaRealRecieveLinkData)
+	ReceivedRealData(*EBestWrapper, XaRealReceiveRealData)
+	ReceivedLinkData(*EBestWrapper, XaRealReceiveLinkData)
 }
 
-type ebestEvent struct {
+type EBestWrapperEvent struct {
 	lpVtbl *ole.IDispatchVtbl
 	ref    int32
-	host   *Ebest
+	host   *EBestWrapper
 }
 
-type Ebest struct {
+type EBestWrapper struct {
 	objName string
 
 	unk   *ole.IUnknown
 	disp  *ole.IDispatch
-	event *ebestEvent
+	event *EBestWrapperEvent
 
 	cbSession callbackSession
 	cbQuery   callbackQuery
@@ -71,7 +71,7 @@ type Ebest struct {
 	cookie uint32
 }
 
-func (e *Ebest) Create(name string) {
+func (e *EBestWrapper) Create(name string) {
 	var clsid *ole.GUID
 	switch name {
 	case "XASession":
@@ -97,7 +97,7 @@ func (e *Ebest) Create(name string) {
 	e.disp = disp
 }
 
-func (e *Ebest) Release() {
+func (e *EBestWrapper) Release() {
 	if e.unk != nil {
 		e.unk.Release()
 		e.unk = nil
@@ -108,9 +108,9 @@ func (e *Ebest) Release() {
 	}
 }
 
-func (e *Ebest) BindEvent(callback interface{}) {
+func (e *EBestWrapper) BindEvent(callback interface{}) {
 	if e.event == nil {
-		e.event = &ebestEvent{}
+		e.event = &EBestWrapperEvent{}
 		e.event.lpVtbl = &ole.IDispatchVtbl{}
 		e.event.lpVtbl.QueryInterface = syscall.NewCallback(queryInterface)
 		e.event.lpVtbl.AddRef = syscall.NewCallback(addRef)
@@ -159,7 +159,7 @@ func (e *Ebest) BindEvent(callback interface{}) {
 	e.cookie = cookie
 }
 
-func (e *Ebest) UnBindEvent() {
+func (e *EBestWrapper) UnBindEvent() {
 	if e.point != nil {
 		e.point.Unadvise(e.cookie)
 		e.point.Release()
@@ -183,13 +183,13 @@ func queryInterface(this *ole.IUnknown, iid *ole.GUID, punk **ole.IUnknown) uint
 }
 
 func addRef(this *ole.IUnknown) int32 {
-	pthis := (*ebestEvent)(unsafe.Pointer(this))
+	pthis := (*EBestWrapperEvent)(unsafe.Pointer(this))
 	pthis.ref++
 	return pthis.ref
 }
 
 func release(this *ole.IUnknown) int32 {
-	pthis := (*ebestEvent)(unsafe.Pointer(this))
+	pthis := (*EBestWrapperEvent)(unsafe.Pointer(this))
 	pthis.ref--
 	return pthis.ref
 }
@@ -231,7 +231,7 @@ func invoke(this *ole.IDispatch, dispid int, riid *ole.GUID, lcid int, flags int
 	vv := reflect.SliceHeader{Data: dispp.rgvarg, Len: int(dispp.cArgs), Cap: int(dispp.cArgs)}
 	v := *(*[]ole.VARIANT)(unsafe.Pointer(&vv))
 
-	pthis := (*ebestEvent)(unsafe.Pointer(this))
+	pthis := (*EBestWrapperEvent)(unsafe.Pointer(this))
 
 	switch pthis.host.objName {
 	case "XASession":
@@ -280,7 +280,7 @@ func invoke(this *ole.IDispatch, dispid int, riid *ole.GUID, lcid int, flags int
 			}
 
 		case eventXARealReceiveLinkData:
-			x := XaRealRecieveLinkData{LinkName: v[2].Value().(string), Data: v[1].Value().(string), Filler: v[0].Value().(string)}
+			x := XaRealReceiveLinkData{LinkName: v[2].Value().(string), Data: v[1].Value().(string), Filler: v[0].Value().(string)}
 			if pthis.host.cbReal != nil {
 				pthis.host.cbReal.ReceivedLinkData(pthis.host, x)
 			}

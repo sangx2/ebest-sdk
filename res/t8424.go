@@ -2,8 +2,6 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // T8424 업종전체조회
@@ -12,8 +10,6 @@ type T8424InBlock struct {
 }
 
 type T8424OutBlock struct {
-	gorm.Model `json:"-"`
-
 	Hname  string `json:"업종명"`
 	Upcode string `json:"업종코드"`
 }

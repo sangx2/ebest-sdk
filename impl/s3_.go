@@ -13,13 +13,13 @@ type S3 struct {
 	OutBlock res.S3OutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
-	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
+	ReceiveLinkDataChan chan wrapper.XaRealReceiveLinkData
 }
 
 func NewS3() *S3 {
 	return &S3{
 		ReceiveRealDataChan: make(chan wrapper.XaRealReceiveRealData, 1),
-		ReceiveLinkDataChan: make(chan wrapper.XaRealRecieveLinkData, 1),
+		ReceiveLinkDataChan: make(chan wrapper.XaRealReceiveLinkData, 1),
 	}
 }
 
@@ -27,11 +27,11 @@ func (s S3) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
 	return s.ReceiveRealDataChan
 }
 
-func (s S3) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
+func (s S3) GetReceivedLinkDataChan() chan wrapper.XaRealReceiveLinkData {
 	return s.ReceiveLinkDataChan
 }
 
-func (s *S3) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
+func (s *S3) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlock interface{}) error {
 	e.ResFileName(resPath + "S3_.res")
 
 	if i, ok := inBlock.(res.S3InBlock); !ok {
@@ -49,7 +49,7 @@ func (s S3) GetOutBlock() interface{} {
 	return s.OutBlock
 }
 
-func (s *S3) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData) {
+func (s *S3) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	s.OutBlock.Chetime = e.GetFieldData("OutBlock", "chetime", 0)
 	s.OutBlock.Sign = e.GetFieldData("OutBlock", "sign", 0)
 	s.OutBlock.Change = e.GetFieldData("OutBlock", "change", 0)
@@ -80,6 +80,6 @@ func (s *S3) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData)
 	s.ReceiveRealDataChan <- x
 }
 
-func (s S3) ReceivedLinkData(ew *wrapper.Ebest, x wrapper.XaRealRecieveLinkData) {
+func (s S3) ReceivedLinkData(ew *wrapper.EBestWrapper, x wrapper.XaRealReceiveLinkData) {
 	s.ReceiveLinkDataChan <- x
 }

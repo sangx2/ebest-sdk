@@ -2,8 +2,6 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // T1511 업종 현재가
@@ -12,8 +10,6 @@ type T1511InBlock struct {
 }
 
 type T1511OutBlock struct {
-	gorm.Model `json:"-"`
-
 	Gubun        string `json:"업종구분(1:KOSPI업종 2:KOSDAQ업종 3:섹터지수 9:기타)"`
 	Hname        string `json:"업종명"`
 	Pricejisu    string `json:"현재지수"`

@@ -2,8 +2,6 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // CSPAT00800 현물 취소주문
@@ -16,8 +14,6 @@ type CSPAT00800InBlock1 struct {
 }
 
 type CSPAT00800OutBlock1 struct {
-	gorm.Model `json:"-"`
-
 	RecCnt     string `json:"레코드갯수"`
 	OrgOrdNo   string `json:"원주문번호"`
 	AcntNo     string `json:"계좌번호"`
@@ -40,8 +36,6 @@ func (c CSPAT00800OutBlock1) ToJSON() string {
 }
 
 type CSPAT00800OutBlock2 struct {
-	gorm.Model `json:"-"`
-
 	RecCnt            string `json:"레코드갯수"`
 	OrdNo             string `json:"주문번호"`
 	PrntOrdNo         string `json:"모주문번호"`

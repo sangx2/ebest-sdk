@@ -8,7 +8,8 @@ import (
 
 // T1511 업종 현재가
 type T1511 struct {
-	InBlock  res.T1511InBlock
+	InBlock res.T1511InBlock
+
 	OutBlock res.T1511OutBlock
 
 	TPS, LPP int
@@ -53,7 +54,7 @@ func (t T1511) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryReceiveSe
 	return t.ReceiveChartSearchRealDataChan
 }
 
-func (t *T1511) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
+func (t *T1511) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "t1511.res")
 
 	if len(inBlocks) != 1 {
@@ -75,7 +76,7 @@ func (t T1511) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock}
 }
 
-func (t *T1511) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
+func (t *T1511) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	t.OutBlock.Gubun = e.GetFieldData("t1511OutBlock", "gubun", 0)
 	t.OutBlock.Hname = e.GetFieldData("t1511OutBlock", "hname", 0)
 	t.OutBlock.Pricejisu = e.GetFieldData("t1511OutBlock", "pricejisu", 0)
@@ -145,14 +146,14 @@ func (t *T1511) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
 	t.ReceiveDataChan <- x
 }
 
-func (t T1511) ReceivedMessage(e *wrapper.Ebest, x wrapper.XaQueryReceiveMessage) {
+func (t T1511) ReceivedMessage(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveMessage) {
 	t.ReceiveMessageChan <- x
 }
 
-func (t T1511) ReceivedChartRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveChartRealData) {
+func (t T1511) ReceivedChartRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveChartRealData) {
 	t.ReceiveChartRealDataChan <- x
 }
 
-func (t T1511) ReceivedSearchRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveSearchRealData) {
+func (t T1511) ReceivedSearchRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveSearchRealData) {
 	t.ReceiveChartSearchRealDataChan <- x
 }

@@ -2,8 +2,6 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // CSPAT00600 현물 정상주문
@@ -21,8 +19,6 @@ type CSPAT00600InBlock1 struct {
 }
 
 type CSPAT00600OutBlock1 struct {
-	gorm.Model `json:"-"`
-
 	RecCnt            string `json:"레코드갯수"`
 	AcntNo            string `json:"계좌번호"`
 	InptPwd           string `json:"입력비밀번호"`
@@ -57,8 +53,6 @@ func (c CSPAT00600OutBlock1) ToJSON() string {
 }
 
 type CSPAT00600OutBlock2 struct {
-	gorm.Model `json:"-"`
-
 	RecCnt      string `json:"레코드갯수"`
 	OrdNo       string `json:"주문번호"`
 	OrdTime     string `json:"주문시각"`

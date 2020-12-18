@@ -2,8 +2,6 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // H1 KOSPI호가잔량
@@ -12,8 +10,6 @@ type H1InBlock struct {
 }
 
 type H1OutBlock struct {
-	gorm.Model `json:"-"`
-
 	Hotime      string `json:"호가시간"`
 	Offerho1    string `json:"매도호가1"`
 	Offerrem1   string `json:"매도호가잔량1"`

@@ -8,17 +8,18 @@ import (
 
 // HA KOSDAQ호가잔량
 type HA struct {
-	InBlock  res.HAInBlock
+	InBlock res.HAInBlock
+
 	OutBlock res.HAOutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
-	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
+	ReceiveLinkDataChan chan wrapper.XaRealReceiveLinkData
 }
 
 func NewHA() *HA {
 	return &HA{
 		ReceiveRealDataChan: make(chan wrapper.XaRealReceiveRealData, 1),
-		ReceiveLinkDataChan: make(chan wrapper.XaRealRecieveLinkData, 1),
+		ReceiveLinkDataChan: make(chan wrapper.XaRealReceiveLinkData, 1),
 	}
 }
 
@@ -26,11 +27,11 @@ func (h HA) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
 	return h.ReceiveRealDataChan
 }
 
-func (h HA) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
+func (h HA) GetReceivedLinkDataChan() chan wrapper.XaRealReceiveLinkData {
 	return h.ReceiveLinkDataChan
 }
 
-func (h *HA) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
+func (h *HA) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlock interface{}) error {
 	e.ResFileName(resPath + "HA_.res")
 
 	if i, ok := inBlock.(res.HAInBlock); !ok {
@@ -48,7 +49,7 @@ func (h HA) GetOutBlock() interface{} {
 	return h.OutBlock
 }
 
-func (h *HA) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData) {
+func (h *HA) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	h.OutBlock.Hotime = e.GetFieldData("OutBlock", "hotime", 0)
 	h.OutBlock.Offerho1 = e.GetFieldData("OutBlock", "offerho1", 0)
 	h.OutBlock.Offerrem1 = e.GetFieldData("OutBlock", "offerrem1", 0)
@@ -99,6 +100,6 @@ func (h *HA) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData)
 	h.ReceiveRealDataChan <- x
 }
 
-func (h HA) ReceivedLinkData(ew *wrapper.Ebest, x wrapper.XaRealRecieveLinkData) {
+func (h HA) ReceivedLinkData(ew *wrapper.EBestWrapper, x wrapper.XaRealReceiveLinkData) {
 	h.ReceiveLinkDataChan <- x
 }

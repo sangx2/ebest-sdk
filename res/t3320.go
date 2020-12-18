@@ -2,8 +2,6 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // T3320 FNG 요약
@@ -12,8 +10,6 @@ type T3320InBlock struct {
 }
 
 type T3320OutBlock struct {
-	gorm.Model `json:"-"`
-
 	Upgubunnm    string `json:"업종구분명"`
 	Sijangcd     string `json:"시장구분"`
 	Marketnm     string `json:"시장구분명"`
@@ -43,10 +39,8 @@ func (t T3320OutBlock) ToJSON() string {
 }
 
 type T3320OutBlock1 struct {
-	gorm.Model `json:"-"`
-
 	Gicode   string `json:"기업코드"`
-	Gsym     string `json:결산년월"`
+	Gsym     string `json:"결산년월"`
 	Gsgb     string `json:"결산구분"`
 	Per      string `json:"PER"`
 	Eps      string `json:"EPS"`

@@ -2,8 +2,6 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // CSPAQ12200 현물계좌 예수금/주문가능금액/총평가 조회
@@ -16,8 +14,6 @@ type CSPAQ12200InBlock1 struct {
 }
 
 type CSPAQ12200OutBlock1 struct {
-	gorm.Model `json:"-"`
-
 	RecCnt    string `json:"레코드갯수"`
 	MgmtBrnNo string `json:"관리지점번호"`
 	AcntNo    string `json:"계좌번호"`
@@ -31,8 +27,6 @@ func (c CSPAQ12200OutBlock1) ToJSON() string {
 }
 
 type CSPAQ12200OutBlock2 struct {
-	gorm.Model `json:"-"`
-
 	RecCnt                 string `json:"레코드갯수"`
 	BrnNm                  string `json:"지점명"`
 	AcntNm                 string `json:"계좌명"`

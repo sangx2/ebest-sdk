@@ -2,8 +2,6 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // S3 KOSPI 체결
@@ -12,8 +10,6 @@ type S3InBlock struct {
 }
 
 type S3OutBlock struct {
-	gorm.Model `json:"-"`
-
 	Chetime    string `json:"체결시간"`
 	Sign       string `json:"전일대비구분 {1:상한 2:상승 3:보합 4:하한 5:하락}"`
 	Change     string `json:"전일대비"`
