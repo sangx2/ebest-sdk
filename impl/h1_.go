@@ -13,13 +13,13 @@ type H1 struct {
 	OutBlock res.H1OutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
-	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
+	ReceiveLinkDataChan chan wrapper.XaRealReceiveLinkData
 }
 
 func NewH1() *H1 {
 	return &H1{
 		ReceiveRealDataChan: make(chan wrapper.XaRealReceiveRealData, 1),
-		ReceiveLinkDataChan: make(chan wrapper.XaRealRecieveLinkData, 1),
+		ReceiveLinkDataChan: make(chan wrapper.XaRealReceiveLinkData, 1),
 	}
 }
 
@@ -27,11 +27,11 @@ func (h H1) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
 	return h.ReceiveRealDataChan
 }
 
-func (h H1) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
+func (h H1) GetReceivedLinkDataChan() chan wrapper.XaRealReceiveLinkData {
 	return h.ReceiveLinkDataChan
 }
 
-func (h *H1) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
+func (h *H1) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlock interface{}) error {
 	e.ResFileName(resPath + "H1_.res")
 
 	if i, ok := inBlock.(res.H1InBlock); !ok {
@@ -49,7 +49,7 @@ func (h H1) GetOutBlock() interface{} {
 	return h.OutBlock
 }
 
-func (h *H1) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData) {
+func (h *H1) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	h.OutBlock.Hotime = e.GetFieldData("OutBlock", "hotime", 0)
 	h.OutBlock.Offerho1 = e.GetFieldData("OutBlock", "offerho1", 0)
 	h.OutBlock.Offerrem1 = e.GetFieldData("OutBlock", "offerrem1", 0)
@@ -100,6 +100,6 @@ func (h *H1) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData)
 	h.ReceiveRealDataChan <- x
 }
 
-func (h H1) ReceivedLinkData(ew *wrapper.Ebest, x wrapper.XaRealRecieveLinkData) {
+func (h H1) ReceivedLinkData(ew *wrapper.EBestWrapper, x wrapper.XaRealReceiveLinkData) {
 	h.ReceiveLinkDataChan <- x
 }

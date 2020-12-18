@@ -55,7 +55,7 @@ func (c CSPAT00600) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryRece
 	return c.ReceiveChartSearchRealDataChan
 }
 
-func (c *CSPAT00600) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
+func (c *CSPAT00600) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "CSPAT00600.res")
 
 	if len(inBlocks) != 1 {
@@ -86,7 +86,7 @@ func (c CSPAT00600) GetOutBlocks() []interface{} {
 	return []interface{}{c.OutBlock1, c.OutBlock2}
 }
 
-func (c *CSPAT00600) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
+func (c *CSPAT00600) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	c.OutBlock1.RecCnt = e.GetFieldData("CSPAT00600OutBlock1", "RecCnt", 0)
 	c.OutBlock1.AcntNo = e.GetFieldData("CSPAT00600OutBlock1", "AcntNo", 0)
 	c.OutBlock1.InptPwd = e.GetFieldData("CSPAT00600OutBlock1", "InptPwd", 0)
@@ -136,14 +136,14 @@ func (c *CSPAT00600) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData
 	c.ReceiveDataChan <- x
 }
 
-func (c CSPAT00600) ReceivedMessage(e *wrapper.Ebest, x wrapper.XaQueryReceiveMessage) {
+func (c CSPAT00600) ReceivedMessage(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveMessage) {
 	c.ReceiveMessageChan <- x
 }
 
-func (c CSPAT00600) ReceivedChartRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveChartRealData) {
+func (c CSPAT00600) ReceivedChartRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveChartRealData) {
 	c.ReceiveChartRealDataChan <- x
 }
 
-func (c CSPAT00600) ReceivedSearchRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveSearchRealData) {
+func (c CSPAT00600) ReceivedSearchRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveSearchRealData) {
 	c.ReceiveChartSearchRealDataChan <- x
 }

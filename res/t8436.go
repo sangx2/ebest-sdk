@@ -2,8 +2,6 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // T8436 주식종목조회 API용
@@ -12,8 +10,6 @@ type T8436InBlock struct {
 }
 
 type T8436OutBlock struct {
-	gorm.Model `json:"-"`
-
 	Hname      string `json:"종목명"`
 	Shcode     string `json:"단축코드"`
 	Expcode    string `json:"확장코드"`

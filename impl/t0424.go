@@ -9,7 +9,8 @@ import (
 
 // T0424 주식 잔고2
 type T0424 struct {
-	InBlock   res.T0424InBlock
+	InBlock res.T0424InBlock
+
 	OutBlock  res.T0424OutBlock
 	OutBlock1 []res.T0424OutBlock1
 
@@ -55,7 +56,7 @@ func (t T0424) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryReceiveSe
 	return t.ReceiveChartSearchRealDataChan
 }
 
-func (t *T0424) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
+func (t *T0424) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "t0424.res")
 
 	if len(inBlocks) != 1 {
@@ -83,7 +84,7 @@ func (t T0424) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock, t.OutBlock1}
 }
 
-func (t *T0424) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
+func (t *T0424) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	t.OutBlock.Sunamt = e.GetFieldData("t0424OutBlock", "sunamt", 0)
 	t.OutBlock.Dtsunik = e.GetFieldData("t0424OutBlock", "dtsunik", 0)
 	t.OutBlock.Mamt = e.GetFieldData("t0424OutBlock", "mamt", 0)
@@ -134,14 +135,14 @@ func (t *T0424) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
 	t.ReceiveDataChan <- x
 }
 
-func (t T0424) ReceivedMessage(e *wrapper.Ebest, x wrapper.XaQueryReceiveMessage) {
+func (t T0424) ReceivedMessage(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveMessage) {
 	t.ReceiveMessageChan <- x
 }
 
-func (t T0424) ReceivedChartRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveChartRealData) {
+func (t T0424) ReceivedChartRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveChartRealData) {
 	t.ReceiveChartRealDataChan <- x
 }
 
-func (t T0424) ReceivedSearchRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveSearchRealData) {
+func (t T0424) ReceivedSearchRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveSearchRealData) {
 	t.ReceiveChartSearchRealDataChan <- x
 }

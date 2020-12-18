@@ -2,8 +2,6 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // T1101 주식 현재가 호가 조회
@@ -12,8 +10,6 @@ type T1101InBlock struct {
 }
 
 type T1101OutBlock struct {
-	gorm.Model `json:"-"`
-
 	Hname         string `json:"한글명"`
 	Price         string `json:"현재가"`
 	Sign          string `json:"전일대비구분"`

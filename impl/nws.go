@@ -13,13 +13,13 @@ type NWS struct {
 	OutBlock res.NWSOutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
-	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
+	ReceiveLinkDataChan chan wrapper.XaRealReceiveLinkData
 }
 
 func NewNWS() *NWS {
 	return &NWS{
 		ReceiveRealDataChan: make(chan wrapper.XaRealReceiveRealData, 1),
-		ReceiveLinkDataChan: make(chan wrapper.XaRealRecieveLinkData, 1),
+		ReceiveLinkDataChan: make(chan wrapper.XaRealReceiveLinkData, 1),
 	}
 }
 
@@ -27,11 +27,11 @@ func (n NWS) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
 	return n.ReceiveRealDataChan
 }
 
-func (n NWS) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
+func (n NWS) GetReceivedLinkDataChan() chan wrapper.XaRealReceiveLinkData {
 	return n.ReceiveLinkDataChan
 }
 
-func (n *NWS) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
+func (n *NWS) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlock interface{}) error {
 	e.ResFileName(resPath + "NWS.res")
 
 	if i, ok := inBlock.(res.NWSInBlock); !ok {
@@ -49,7 +49,7 @@ func (n NWS) GetOutBlock() interface{} {
 	return n.OutBlock
 }
 
-func (n *NWS) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData) {
+func (n *NWS) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	n.OutBlock.Date = e.GetFieldData("OutBlock", "date", 0)
 	n.OutBlock.Time = e.GetFieldData("OutBlock", "time", 0)
 	n.OutBlock.Publisher = e.GetFieldData("OutBlock", "id", 0)
@@ -61,6 +61,6 @@ func (n *NWS) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData
 	n.ReceiveRealDataChan <- x
 }
 
-func (n NWS) ReceivedLinkData(e *wrapper.Ebest, x wrapper.XaRealRecieveLinkData) {
+func (n NWS) ReceivedLinkData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveLinkData) {
 	n.ReceiveLinkDataChan <- x
 }

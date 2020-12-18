@@ -8,7 +8,8 @@ import (
 
 // T1101 주식 현재가 호가 조회
 type T1101 struct {
-	InBlock  res.T1101InBlock
+	InBlock res.T1101InBlock
+
 	OutBlock res.T1101OutBlock
 
 	TPS, LPP int
@@ -53,7 +54,7 @@ func (t T1101) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryReceiveSe
 	return t.ReceiveChartSearchRealDataChan
 }
 
-func (t *T1101) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
+func (t *T1101) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "t1101.res")
 
 	if len(inBlocks) != 1 {
@@ -75,7 +76,7 @@ func (t T1101) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock}
 }
 
-func (t *T1101) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
+func (t *T1101) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	t.OutBlock.Hname = e.GetFieldData("t1101OutBlock", "Hname", 0)
 	t.OutBlock.Price = e.GetFieldData("t1101OutBlock", "price", 0)
 	t.OutBlock.Sign = e.GetFieldData("t1101OutBlock", "sign", 0)
@@ -166,14 +167,14 @@ func (t *T1101) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
 	t.ReceiveDataChan <- x
 }
 
-func (t T1101) ReceivedMessage(e *wrapper.Ebest, x wrapper.XaQueryReceiveMessage) {
+func (t T1101) ReceivedMessage(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveMessage) {
 	t.ReceiveMessageChan <- x
 }
 
-func (t T1101) ReceivedChartRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveChartRealData) {
+func (t T1101) ReceivedChartRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveChartRealData) {
 	t.ReceiveChartRealDataChan <- x
 }
 
-func (t T1101) ReceivedSearchRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveSearchRealData) {
+func (t T1101) ReceivedSearchRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveSearchRealData) {
 	t.ReceiveChartSearchRealDataChan <- x
 }

@@ -8,17 +8,18 @@ import (
 
 // K3 KOSDAQ 체결
 type K3 struct {
-	InBlock  res.K3InBlock
+	InBlock res.K3InBlock
+
 	OutBlock res.K3OutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
-	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
+	ReceiveLinkDataChan chan wrapper.XaRealReceiveLinkData
 }
 
 func NewK3() *K3 {
 	return &K3{
 		ReceiveRealDataChan: make(chan wrapper.XaRealReceiveRealData, 1),
-		ReceiveLinkDataChan: make(chan wrapper.XaRealRecieveLinkData, 1),
+		ReceiveLinkDataChan: make(chan wrapper.XaRealReceiveLinkData, 1),
 	}
 }
 
@@ -26,11 +27,11 @@ func (k K3) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
 	return k.ReceiveRealDataChan
 }
 
-func (k K3) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
+func (k K3) GetReceivedLinkDataChan() chan wrapper.XaRealReceiveLinkData {
 	return k.ReceiveLinkDataChan
 }
 
-func (k *K3) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
+func (k *K3) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlock interface{}) error {
 	e.ResFileName(resPath + "K3_.res")
 
 	if i, ok := inBlock.(res.K3InBlock); !ok {
@@ -48,7 +49,7 @@ func (k K3) GetOutBlock() interface{} {
 	return k.OutBlock
 }
 
-func (k *K3) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData) {
+func (k *K3) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	k.OutBlock.Chetime = e.GetFieldData("OutBlock", "chetime", 0)
 	k.OutBlock.Sign = e.GetFieldData("OutBlock", "sign", 0)
 	k.OutBlock.Change = e.GetFieldData("OutBlock", "change", 0)
@@ -79,6 +80,6 @@ func (k *K3) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData)
 	k.ReceiveRealDataChan <- x
 }
 
-func (k K3) ReceivedLinkData(ew *wrapper.Ebest, x wrapper.XaRealRecieveLinkData) {
+func (k K3) ReceivedLinkData(ew *wrapper.EBestWrapper, x wrapper.XaRealReceiveLinkData) {
 	k.ReceiveLinkDataChan <- x
 }

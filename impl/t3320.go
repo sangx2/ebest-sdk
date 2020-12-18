@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/sangx2/ebest/res"
 	"github.com/sangx2/ebest/wrapper"
+	"strings"
 )
 
 // T3320 FNG 요약
@@ -55,7 +56,7 @@ func (t T3320) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryReceiveSe
 	return t.ReceiveChartSearchRealDataChan
 }
 
-func (t *T3320) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
+func (t *T3320) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "t3320.res")
 
 	if len(inBlocks) != 1 {
@@ -77,22 +78,22 @@ func (t T3320) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock, t.OutBlock1}
 }
 
-func (t *T3320) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
+func (t *T3320) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	t.OutBlock.Upgubunnm = e.GetFieldData("t3320OutBlock", "upgubunnm", 0)
 	t.OutBlock.Sijangcd = e.GetFieldData("t3320OutBlock", "sijangcd", 0)
 	t.OutBlock.Marketnm = e.GetFieldData("t3320OutBlock", "marketnm", 0)
-	t.OutBlock.Company = e.GetFieldData("t3320OutBlock", "company", 0)
-	t.OutBlock.Baddress = e.GetFieldData("t3320OutBlock", "baddress", 0)
-	t.OutBlock.Btelno = e.GetFieldData("t3320OutBlock", "btelno", 0)
+	t.OutBlock.Company = strings.TrimSpace(e.GetFieldData("t3320OutBlock", "company", 0))
+	t.OutBlock.Baddress = strings.TrimSpace(e.GetFieldData("t3320OutBlock", "baddress", 0))
+	t.OutBlock.Btelno = strings.TrimSpace(e.GetFieldData("t3320OutBlock", "btelno", 0))
 	t.OutBlock.Gsyyyy = e.GetFieldData("t3320OutBlock", "gsyyyy", 0)
 	t.OutBlock.Gsmm = e.GetFieldData("t3320OutBlock", "gsmm", 0)
 	t.OutBlock.Gsym = e.GetFieldData("t3320OutBlock", "gsym", 0)
 	t.OutBlock.Lstprice = e.GetFieldData("t3320OutBlock", "lstprice", 0)
 	t.OutBlock.Gstock = e.GetFieldData("t3320OutBlock", "gstock", 0)
-	t.OutBlock.Homeurl = e.GetFieldData("t3320OutBlock", "homeurl", 0)
-	t.OutBlock.Grdnm = e.GetFieldData("t3320OutBlock", "grdnm", 0)
+	t.OutBlock.Homeurl = strings.TrimSpace(e.GetFieldData("t3320OutBlock", "homeurl", 0))
+	t.OutBlock.Grdnm = strings.TrimSpace(e.GetFieldData("t3320OutBlock", "grdnm", 0))
 	t.OutBlock.Foreignratio = e.GetFieldData("t3320OutBlock", "foreignratio", 0)
-	t.OutBlock.Irtel = e.GetFieldData("t3320OutBlock", "irtel", 0)
+	t.OutBlock.Irtel = strings.TrimSpace(e.GetFieldData("t3320OutBlock", "irtel", 0))
 	t.OutBlock.Capital = e.GetFieldData("t3320OutBlock", "capital", 0)
 	t.OutBlock.Sigavalue = e.GetFieldData("t3320OutBlock", "sigavalue", 0)
 	t.OutBlock.Cashsis = e.GetFieldData("t3320OutBlock", "cashsis", 0)
@@ -123,14 +124,14 @@ func (t *T3320) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
 	t.ReceiveDataChan <- x
 }
 
-func (t T3320) ReceivedMessage(e *wrapper.Ebest, x wrapper.XaQueryReceiveMessage) {
+func (t T3320) ReceivedMessage(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveMessage) {
 	t.ReceiveMessageChan <- x
 }
 
-func (t T3320) ReceivedChartRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveChartRealData) {
+func (t T3320) ReceivedChartRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveChartRealData) {
 	t.ReceiveChartRealDataChan <- x
 }
 
-func (t T3320) ReceivedSearchRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveSearchRealData) {
+func (t T3320) ReceivedSearchRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveSearchRealData) {
 	t.ReceiveChartSearchRealDataChan <- x
 }

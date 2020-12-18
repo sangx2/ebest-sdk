@@ -10,13 +10,13 @@ type SC3 struct {
 	OutBlock res.SC3OutBlock
 
 	ReceiveRealDataChan chan wrapper.XaRealReceiveRealData
-	ReceiveLinkDataChan chan wrapper.XaRealRecieveLinkData
+	ReceiveLinkDataChan chan wrapper.XaRealReceiveLinkData
 }
 
 func NewSC3() *SC3 {
 	return &SC3{
 		ReceiveRealDataChan: make(chan wrapper.XaRealReceiveRealData, 1),
-		ReceiveLinkDataChan: make(chan wrapper.XaRealRecieveLinkData, 1),
+		ReceiveLinkDataChan: make(chan wrapper.XaRealReceiveLinkData, 1),
 	}
 }
 
@@ -24,11 +24,11 @@ func (s SC3) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
 	return s.ReceiveRealDataChan
 }
 
-func (s SC3) GetReceivedLinkDataChan() chan wrapper.XaRealRecieveLinkData {
+func (s SC3) GetReceivedLinkDataChan() chan wrapper.XaRealReceiveLinkData {
 	return s.ReceiveLinkDataChan
 }
 
-func (s *SC3) SetFieldData(e *wrapper.Ebest, resPath string, inBlock interface{}) error {
+func (s *SC3) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlock interface{}) error {
 	e.ResFileName(resPath + "SC3.res")
 
 	return nil
@@ -38,7 +38,7 @@ func (s SC3) GetOutBlock() interface{} {
 	return s.OutBlock
 }
 
-func (s *SC3) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData) {
+func (s *SC3) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	s.OutBlock.Lineseq = e.GetFieldData("OutBlock", "lineseq", 0)
 	s.OutBlock.Accno = e.GetFieldData("OutBlock", "accno", 0)
 	s.OutBlock.User = e.GetFieldData("OutBlock", "user", 0)
@@ -173,6 +173,6 @@ func (s *SC3) ReceivedRealData(e *wrapper.Ebest, x wrapper.XaRealReceiveRealData
 	s.ReceiveRealDataChan <- x
 }
 
-func (s SC3) ReceivedLinkData(ew *wrapper.Ebest, x wrapper.XaRealRecieveLinkData) {
+func (s SC3) ReceivedLinkData(ew *wrapper.EBestWrapper, x wrapper.XaRealReceiveLinkData) {
 	s.ReceiveLinkDataChan <- x
 }

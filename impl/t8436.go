@@ -8,7 +8,8 @@ import (
 
 // T8436 주식종목조회 API용
 type T8436 struct {
-	InBlock  res.T8436InBlock
+	InBlock res.T8436InBlock
+
 	OutBlock []res.T8436OutBlock
 
 	TPS, LPP int
@@ -53,7 +54,7 @@ func (t T8436) GetReceiveChartSearchRealDataChan() chan wrapper.XaQueryReceiveSe
 	return t.ReceiveChartSearchRealDataChan
 }
 
-func (t *T8436) SetFieldData(e *wrapper.Ebest, resPath string, inBlocks ...interface{}) error {
+func (t *T8436) SetFieldData(e *wrapper.EBestWrapper, resPath string, inBlocks ...interface{}) error {
 	e.ResFileName(resPath + "t8436.res")
 
 	if len(inBlocks) != 1 {
@@ -75,7 +76,7 @@ func (t T8436) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock}
 }
 
-func (t *T8436) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
+func (t *T8436) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	TRcount := e.GetBlockCount("t8436OutBlock")
 
 	t.OutBlock = nil
@@ -102,14 +103,14 @@ func (t *T8436) ReceivedData(e *wrapper.Ebest, x wrapper.XaQueryReceiveData) {
 	t.ReceiveDataChan <- x
 }
 
-func (t T8436) ReceivedMessage(e *wrapper.Ebest, x wrapper.XaQueryReceiveMessage) {
+func (t T8436) ReceivedMessage(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveMessage) {
 	t.ReceiveMessageChan <- x
 }
 
-func (t T8436) ReceivedChartRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveChartRealData) {
+func (t T8436) ReceivedChartRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveChartRealData) {
 	t.ReceiveChartRealDataChan <- x
 }
 
-func (t T8436) ReceivedSearchRealData(e *wrapper.Ebest, x wrapper.XaQueryReceiveSearchRealData) {
+func (t T8436) ReceivedSearchRealData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveSearchRealData) {
 	t.ReceiveChartSearchRealDataChan <- x
 }

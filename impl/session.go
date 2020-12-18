@@ -22,14 +22,14 @@ func (s Session) GetSessionLoginChan() chan wrapper.XaSessionLogin {
 	return s.LoginChan
 }
 
-func (s Session) ReceivedLogin(ew *wrapper.Ebest, x wrapper.XaSessionLogin) {
+func (s Session) ReceivedLogin(ew *wrapper.EBestWrapper, x wrapper.XaSessionLogin) {
 	s.LoginChan <- x
 }
 
-func (s Session) ReceivedLogout(ew *wrapper.Ebest) {
+func (s Session) ReceivedLogout(ew *wrapper.EBestWrapper) {
 	s.LogoutChan <- true
 }
 
-func (s Session) ReceivedDisConnect(ew *wrapper.Ebest) {
+func (s Session) ReceivedDisConnect(ew *wrapper.EBestWrapper) {
 	s.DisConnectChan <- true
 }

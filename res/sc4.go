@@ -2,14 +2,10 @@ package res
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // SC4 주식주문거부
 type SC4OutBlock struct {
-	gorm.Model `json:"-"`
-
 	Lineseq          string `json:"라인일련번호"`
 	Accno            string `json:"계좌번호"`
 	User             string `json:"조작자ID"`
