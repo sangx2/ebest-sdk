@@ -112,7 +112,6 @@ func (e *EBest) Disconnect() {
 	e.ew.DisconnectServer()
 
 	e.doneChan <- true
-	close(e.doneChan)
 
 	e.wg.Wait()
 }
@@ -153,8 +152,10 @@ func (e *EBest) GetErrorMessage(code int) string {
 // createObject EBest 객체 생성시 등록될 callback 함수
 func (e *EBest) createObject(p uintptr) uintptr {
 	ole.CoInitializeEx(0, ole.COINIT_APARTMENTTHREADED)
+	defer ole.CoUninitialize()
 
 	e.ew.Create("XASession")
+	defer e.ew.Release()
 
 	if !e.ew.ConnectServer(e.srvIP, e.srvPort) {
 		e.createChan <- fmt.Errorf("%s:%s", "s.ew.ConnectServer", e.ew.GetErrorMessage(int(e.ew.GetLastError())))
@@ -171,6 +172,7 @@ func (e *EBest) createObject(p uintptr) uintptr {
 	}
 
 	e.ew.BindEvent(e.cb)
+	defer e.ew.UnBindEvent()
 
 	e.createChan <- nil
 	close(e.createChan)
@@ -180,13 +182,6 @@ func (e *EBest) createObject(p uintptr) uintptr {
 
 		select {
 		case <-e.doneChan:
-			// 쓰레드가 종료 되기 전에 메인 쓰레드가 먼처 종료되므로 defer로 처리 불가
-			e.ew.UnBindEvent()
-
-			e.ew.Release()
-
-			ole.CoUninitialize()
-
 			e.wg.Done()
 			return 0
 		default:
