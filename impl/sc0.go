@@ -1,8 +1,8 @@
 package impl
 
 import (
-	"github.com/sangx2/ebest/res"
-	"github.com/sangx2/ebest/wrapper"
+	"github.com/sangx2/ebestsdk/res"
+	"github.com/sangx2/ebestsdk/wrapper"
 )
 
 // SC0 주식주문접수

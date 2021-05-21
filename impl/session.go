@@ -1,7 +1,7 @@
 package impl
 
 import (
-	"github.com/sangx2/ebest/wrapper"
+	"github.com/sangx2/ebestsdk/wrapper"
 )
 
 type Session struct {

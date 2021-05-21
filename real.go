@@ -1,12 +1,12 @@
-package sdk
+package ebestsdk
 
 import (
 	"sync"
 	"time"
 
-	ole "github.com/go-ole/go-ole"
-	"github.com/sangx2/ebest/interfaces"
-	"github.com/sangx2/ebest/wrapper"
+	"github.com/go-ole/go-ole"
+	"github.com/sangx2/ebestsdk/interfaces"
+	"github.com/sangx2/ebestsdk/wrapper"
 )
 
 type Real struct {

@@ -5,7 +5,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	ole "github.com/go-ole/go-ole"
+	"github.com/go-ole/go-ole"
 )
 
 var (

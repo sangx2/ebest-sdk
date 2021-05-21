@@ -1,4 +1,4 @@
-package sdk
+package ebestsdk
 
 import (
 	"errors"
@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	ole "github.com/go-ole/go-ole"
-	"github.com/sangx2/ebest/impl"
-	"github.com/sangx2/ebest/wrapper"
+	"github.com/go-ole/go-ole"
+	"github.com/sangx2/ebestsdk/impl"
+	"github.com/sangx2/ebestsdk/wrapper"
 )
 
 const (

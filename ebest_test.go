@@ -1,8 +1,8 @@
-package sdk
+package ebestsdk
 
 import (
-	"github.com/sangx2/ebest/impl"
-	"github.com/sangx2/ebest/res"
+	"github.com/sangx2/ebestsdk/impl"
+	"github.com/sangx2/ebestsdk/res"
 	"log"
 	"sync"
 	"testing"

@@ -2,8 +2,8 @@ package impl
 
 import (
 	"errors"
-	"github.com/sangx2/ebest/res"
-	"github.com/sangx2/ebest/wrapper"
+	"github.com/sangx2/ebestsdk/res"
+	"github.com/sangx2/ebestsdk/wrapper"
 )
 
 // HA KOSDAQ호가잔량
