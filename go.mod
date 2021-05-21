@@ -1,4 +1,4 @@
-module github.com/sangx2/ebest-sdk
+module github.com/sangx2/ebestsdk
 
 go 1.15
 
