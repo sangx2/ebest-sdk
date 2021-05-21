@@ -1,4 +1,4 @@
-package ebest
+package sdk
 
 import (
 	"runtime"
