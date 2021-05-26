@@ -1,8 +1,8 @@
-package ebestsdk
+package ebest
 
 import (
-	"github.com/sangx2/ebestsdk/impl"
-	"github.com/sangx2/ebestsdk/res"
+	"github.com/sangx2/ebest-sdk/impl"
+	"github.com/sangx2/ebest-sdk/res"
 	"log"
 	"sync"
 	"testing"
@@ -93,6 +93,7 @@ func TestEbest(t *testing.T) {
 	}(doneChan, &wg)
 
 	time.Sleep(time.Second * 5)
+	nws.Stop("NWS")
 	nws.Close()
 
 	doneChan <- true

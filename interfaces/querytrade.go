@@ -1,6 +1,6 @@
 package interfaces
 
-import "github.com/sangx2/ebestsdk/wrapper"
+import "github.com/sangx2/ebest-sdk/wrapper"
 
 type QueryTrade interface {
 	GetTPS() int

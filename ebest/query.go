@@ -1,4 +1,4 @@
-package ebestsdk
+package ebest
 
 import (
 	"fmt"
@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/go-ole/go-ole"
-	"github.com/sangx2/ebestsdk/interfaces"
-	"github.com/sangx2/ebestsdk/wrapper"
+	"github.com/sangx2/ebest-sdk/interfaces"
+	"github.com/sangx2/ebest-sdk/wrapper"
 )
 
 type Query struct {

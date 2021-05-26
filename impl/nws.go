@@ -2,8 +2,8 @@ package impl
 
 import (
 	"errors"
-	"github.com/sangx2/ebestsdk/res"
-	"github.com/sangx2/ebestsdk/wrapper"
+	"github.com/sangx2/ebest-sdk/res"
+	"github.com/sangx2/ebest-sdk/wrapper"
 )
 
 // NWS 실시간 뉴스 제목 패킷

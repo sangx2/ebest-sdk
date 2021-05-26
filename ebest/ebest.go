@@ -1,14 +1,15 @@
-package ebestsdk
+package ebest
 
 import (
 	"errors"
 	"fmt"
+	"github.com/sangx2/ebest-sdk/interfaces"
 	"sync"
 	"time"
 
 	"github.com/go-ole/go-ole"
-	"github.com/sangx2/ebestsdk/impl"
-	"github.com/sangx2/ebestsdk/wrapper"
+	"github.com/sangx2/ebest-sdk/impl"
+	"github.com/sangx2/ebest-sdk/wrapper"
 )
 
 const (
@@ -72,6 +73,7 @@ type EBest struct {
 	wg         sync.WaitGroup
 }
 
+// NewEBest ebest 객체 생성
 func NewEBest(id, password, certPassword, srvIP string, srvPort int, resPath string) *EBest {
 	e := &EBest{id: id, password: password, certPassword: certPassword, srvIP: srvIP, srvPort: srvPort,
 		cb: impl.NewSession(), ew: new(wrapper.EBestWrapper), resPath: resPath,
@@ -84,6 +86,16 @@ func NewEBest(id, password, certPassword, srvIP string, srvPort int, resPath str
 	}
 
 	return e
+}
+
+// NewQuery query 객체 생성
+func (e *EBest) NewQuery(trade interfaces.QueryTrade) *Query {
+	return NewQuery(e.resPath, trade)
+}
+
+// NewReal real 객체 생성
+func (e *EBest) NewReal(trade interfaces.RealTrade) *Real {
+	return NewReal(e.resPath, trade)
 }
 
 // Connect 서버에 연결
@@ -151,9 +163,13 @@ func (e *EBest) GetErrorMessage(code int) string {
 
 // createObject EBest 객체 생성시 등록될 callback 함수
 func (e *EBest) createObject(p uintptr) uintptr {
+	defer e.wg.Done()
+
 	ole.CoInitializeEx(0, ole.COINIT_APARTMENTTHREADED)
+	defer ole.CoUninitialize()
 
 	e.ew.Create("XASession")
+	defer e.ew.Release()
 
 	if !e.ew.ConnectServer(e.srvIP, e.srvPort) {
 		e.createChan <- fmt.Errorf("%s:%s", "s.ew.ConnectServer", e.ew.GetErrorMessage(int(e.ew.GetLastError())))
@@ -170,6 +186,7 @@ func (e *EBest) createObject(p uintptr) uintptr {
 	}
 
 	e.ew.BindEvent(e.cb)
+	defer e.ew.UnBindEvent()
 
 	e.createChan <- nil
 	close(e.createChan)
@@ -179,12 +196,6 @@ func (e *EBest) createObject(p uintptr) uintptr {
 
 		select {
 		case <-e.doneChan:
-			// defer 적용안됨
-			e.ew.UnBindEvent()
-			e.ew.Release()
-			ole.CoUninitialize()
-
-			e.wg.Done()
 			return 0
 		default:
 			time.Sleep(DelayPumpWaitingMessages)

@@ -1,12 +1,12 @@
-package ebestsdk
+package ebest
 
 import (
 	"sync"
 	"time"
 
 	"github.com/go-ole/go-ole"
-	"github.com/sangx2/ebestsdk/interfaces"
-	"github.com/sangx2/ebestsdk/wrapper"
+	"github.com/sangx2/ebest-sdk/interfaces"
+	"github.com/sangx2/ebest-sdk/wrapper"
 )
 
 type Real struct {
@@ -66,27 +66,27 @@ func (r *Real) SetInBlock(inBlock interface{}) error {
 }
 
 // GetOutBlock : 블록의 필드 데이터(값)를 outblock으로 취득
-func (r Real) GetOutBlock() interface{} {
+func (r *Real) GetOutBlock() interface{} {
 	return r.realTrade.GetOutBlock()
 }
 
 // GetReceivedRealDataChan 서버로부터 데이터를 수신 했을 때 발생
-func (r Real) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
+func (r *Real) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
 	return r.realTrade.GetReceivedRealDataChan()
 }
 
 // GetReceivedLinkDataChan HTS로부터 연동 정보를 수신 했을 때 발생
-func (r Real) GetReceivedLinkDataChan() chan wrapper.XaRealReceiveLinkData {
+func (r *Real) GetReceivedLinkDataChan() chan wrapper.XaRealReceiveLinkData {
 	return r.realTrade.GetReceivedLinkDataChan()
 }
 
 // Start 실시간TR을 등록
-func (r Real) Start() {
+func (r *Real) Start() {
 	r.ew.AdviseRealData()
 }
 
 // Stop 한 종목의 실시간TR을 해제
-func (r Real) Stop(key string) {
+func (r *Real) Stop(key string) {
 	r.ew.UnAdviseRealDataWithKey(key)
 }
 

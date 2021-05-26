@@ -3,8 +3,8 @@ package impl
 import (
 	"errors"
 	"fmt"
-	"github.com/sangx2/ebestsdk/res"
-	"github.com/sangx2/ebestsdk/wrapper"
+	"github.com/sangx2/ebest-sdk/res"
+	"github.com/sangx2/ebest-sdk/wrapper"
 )
 
 // T0424 주식 잔고2

@@ -3,8 +3,8 @@ package impl
 import (
 	"errors"
 
-	"github.com/sangx2/ebestsdk/res"
-	"github.com/sangx2/ebestsdk/wrapper"
+	"github.com/sangx2/ebest-sdk/res"
+	"github.com/sangx2/ebest-sdk/wrapper"
 )
 
 // CSPAQ12200 현물계좌 예수금/주문가능금액/총평가 조회

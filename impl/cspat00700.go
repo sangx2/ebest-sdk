@@ -2,8 +2,8 @@ package impl
 
 import (
 	"errors"
-	"github.com/sangx2/ebestsdk/res"
-	"github.com/sangx2/ebestsdk/wrapper"
+	"github.com/sangx2/ebest-sdk/res"
+	"github.com/sangx2/ebest-sdk/wrapper"
 )
 
 // CSPAT00700 현물 정정주문
