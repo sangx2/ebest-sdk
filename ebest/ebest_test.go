@@ -22,15 +22,16 @@ func TestEbest(t *testing.T) {
 
 	e := NewEBest(Id, Passwd, CertPasswd, ServerVirtual, Port, ResPath)
 	if e == nil {
-		log.Fatalf("NewEbest is nil")
+		t.Fatalf("NewEbest is nil")
 	}
 
 	if err = e.Connect(); err != nil {
-		log.Fatalf("Connect :%s", err.Error())
+		t.Fatalf("Connect :%s", err.Error())
 	}
+	defer e.Disconnect()
 
 	if err = e.Login(); err != nil {
-		log.Fatalf("Login :%s", err.Error())
+		t.Fatalf("Login :%s", err.Error())
 	}
 
 	accounts := e.GetAccountList()
@@ -47,6 +48,7 @@ func TestEbest(t *testing.T) {
 	if err = t1101.SetInBlock(res.T1101InBlock{Shcode: "005930"}); err != nil {
 		t.Fatalf("SetInBlock:%s", err.Error())
 	}
+	defer t1101.Close()
 
 	ret := t1101.Request(false)
 	t.Logf("Request:%d\n", ret)
@@ -63,19 +65,19 @@ func TestEbest(t *testing.T) {
 	t8436OutBlocks := t1101.GetOutBlocks()
 	t.Logf("t8436OutBlock:%+v\n", t8436OutBlocks)
 
-	t1101.Close()
-
 	// real
 	nws := NewReal(ResPath, impl.NewNWS())
 	if nws == nil {
 		t.Fatalf("nws is nil")
 	}
+	defer nws.Close()
 
 	if err := nws.SetInBlock(res.NWSInBlock{"NWS001"}); err != nil {
 		t.Fatalf("SetInBlock:%s", err.Error())
 	}
 
 	nws.Start()
+	defer nws.Stop("NWS")
 
 	wg := sync.WaitGroup{}
 	doneChan := make(chan bool, 1)
@@ -93,13 +95,9 @@ func TestEbest(t *testing.T) {
 	}(doneChan, &wg)
 
 	time.Sleep(time.Second * 5)
-	nws.Stop("NWS")
-	nws.Close()
 
 	doneChan <- true
 	close(doneChan)
 
 	wg.Wait()
-
-	e.Disconnect()
 }
