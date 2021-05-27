@@ -31,7 +31,7 @@ func TestEbest(t *testing.T) {
 	defer e.Disconnect()
 
 	if err = e.Login(); err != nil {
-		t.Fatalf("Login :%s", err.Error())
+		t.Fatalf("%s", err.Error())
 	}
 
 	accounts := e.GetAccountList()

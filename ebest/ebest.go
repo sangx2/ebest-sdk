@@ -1,8 +1,6 @@
 package ebest
 
 import (
-	"errors"
-	"fmt"
 	"github.com/sangx2/ebest-sdk/interfaces"
 	"sync"
 	"time"
@@ -114,7 +112,7 @@ func (e *EBest) Connect() error {
 func (e *EBest) Login() error {
 	sessionLogin := <-e.cb.GetSessionLoginChan()
 	if sessionLogin.Code != "0000" {
-		return errors.New(sessionLogin.Msg)
+		return NewErrSession("Login", sessionLogin.Code, sessionLogin.Msg)
 	}
 	return nil
 }
@@ -172,14 +170,14 @@ func (e *EBest) createObject(p uintptr) uintptr {
 	defer e.ew.Release()
 
 	if !e.ew.ConnectServer(e.srvIP, e.srvPort) {
-		e.createChan <- fmt.Errorf("%s:%s", "s.ew.ConnectServer", e.ew.GetErrorMessage(int(e.ew.GetLastError())))
+		e.createChan <- NewErrSession("ConnectServer", string(e.ew.GetLastError()), e.ew.GetErrorMessage(int(e.ew.GetLastError())))
 		close(e.createChan)
 		e.wg.Done()
 		return 0
 	}
 
 	if !e.ew.Login(e.id, e.password, e.certPassword) {
-		e.createChan <- fmt.Errorf("%s:%s", "s.ew.Login", e.ew.GetErrorMessage(int(e.ew.GetLastError())))
+		e.createChan <- NewErrSession("Login", string(e.ew.GetLastError()), e.ew.GetErrorMessage(int(e.ew.GetLastError())))
 		close(e.createChan)
 		e.wg.Done()
 		return 0

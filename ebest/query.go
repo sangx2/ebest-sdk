@@ -60,10 +60,17 @@ func (q *Query) Close() {
 
 // SetInBlock 블록의 데이터(값)를 inblock으로 설정
 func (q *Query) SetInBlock(inBlocks ...interface{}) error {
-	return q.queryTrade.SetFieldData(q.ew, q.resPath, inBlocks[:]...)
+	var errQuery *ErrQuery
+
+	err := q.queryTrade.SetFieldData(q.ew, q.resPath, inBlocks[:]...)
+
+	if err != nil {
+		errQuery = NewErrQuery("SetInBlock", "", err.Error())
+	}
+	return errQuery
 }
 
-// GetOutBlock : 블록의 필드 데이터(값)를 outblock으로 취득
+// GetOutBlocks : 블록의 필드 데이터(값)를 outblock으로 취득
 func (q *Query) GetOutBlocks() []interface{} {
 	return q.queryTrade.GetOutBlocks()
 }
@@ -82,7 +89,7 @@ func (q *Query) GetReceiveDataChan() chan wrapper.XaQueryReceiveData {
 func (q *Query) GetReceiveMessage() (string, error) {
 	msg := <-q.queryTrade.GetReceiveMessageChan()
 	if msg.IsSystemError < 0 {
-		return "", fmt.Errorf("%s:%s", msg.MessageCode, msg.Message)
+		return "", NewErrQuery("GetReceiveMessage", msg.MessageCode, msg.Message)
 	}
 	return fmt.Sprintf("%s:%s", msg.MessageCode, msg.Message), nil
 }

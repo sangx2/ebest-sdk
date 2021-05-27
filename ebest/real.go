@@ -60,7 +60,7 @@ func (r *Real) Close() {
 func (r *Real) SetInBlock(inBlock interface{}) error {
 	err := r.realTrade.SetFieldData(r.ew, r.resPath, inBlock)
 	if err != nil {
-		return err
+		return NewErrReal("SetInBlock", err.Error())
 	}
 	return nil
 }
