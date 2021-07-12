@@ -59,7 +59,7 @@ func (q *Query) Close() {
 }
 
 // SetInBlock 블록의 데이터(값)를 inblock으로 설정
-func (q *Query) SetInBlock(inBlocks ...interface{}) error {
+func (q *Query) SetInBlock(inBlocks ...interface{}) *ErrQuery {
 	var errQuery *ErrQuery
 
 	err := q.queryTrade.SetFieldData(q.ew, q.resPath, inBlocks[:]...)
