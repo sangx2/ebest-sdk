@@ -59,15 +59,13 @@ func (q *Query) Close() {
 }
 
 // SetInBlock 블록의 데이터(값)를 inblock으로 설정
-func (q *Query) SetInBlock(inBlocks ...interface{}) *ErrQuery {
-	var errQuery *ErrQuery
-
+func (q *Query) SetInBlock(inBlocks ...interface{}) error {
 	err := q.queryTrade.SetFieldData(q.ew, q.resPath, inBlocks[:]...)
 
 	if err != nil {
-		errQuery = NewErrQuery("SetInBlock", "", err.Error())
+		return NewErrQuery("SetInBlock", "", err.Error())
 	}
-	return errQuery
+	return nil
 }
 
 // GetOutBlocks : 블록의 필드 데이터(값)를 outblock으로 취득
@@ -91,7 +89,7 @@ func (q *Query) GetReceiveMessage() (string, error) {
 	if msg.IsSystemError < 0 {
 		return "", NewErrQuery("GetReceiveMessage", msg.MessageCode, msg.Message)
 	}
-	return fmt.Sprintf("%s:%s", msg.MessageCode, msg.Message), nil
+	return fmt.Sprintf("%s: %s", msg.MessageCode, msg.Message), nil
 }
 
 // GetReceiveChartRealData 차트 지표 실시간 데이터를 수신 했을 때 발생

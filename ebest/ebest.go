@@ -109,7 +109,7 @@ func (e *EBest) Connect() error {
 }
 
 // Login 로그인 이벤트를 대기
-func (e *EBest) Login() *ErrSession {
+func (e *EBest) Login() error {
 	sessionLogin := <-e.cb.GetSessionLoginChan()
 	if sessionLogin.Code != "0000" {
 		return NewErrSession("Login", sessionLogin.Code, sessionLogin.Msg)
