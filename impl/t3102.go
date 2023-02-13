@@ -79,6 +79,7 @@ func (t T3102) GetOutBlocks() []interface{} {
 }
 
 func (t *T3102) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
+	t.OutBlock = nil
 	for i := 0; i < int(e.GetBlockCount("t3102OutBlock")); i++ {
 		tr := res.T3102OutBlock{
 			SJongcode: e.GetFieldData("t3102OutBlock", "sJongcode", i),
@@ -86,6 +87,7 @@ func (t *T3102) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveDa
 		t.OutBlock = append(t.OutBlock, tr)
 	}
 
+	t.OutBlock1 = nil
 	for i := 0; i < int(e.GetBlockCount("t3102OutBlock1")); i++ {
 		tr := res.T3102OutBlock1{
 			SBody: e.GetFieldData("t3102OutBlock1", "sBody", i),
