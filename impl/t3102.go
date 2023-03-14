@@ -78,6 +78,10 @@ func (t T3102) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock, t.OutBlock1, t.OutBlock2}
 }
 
+func (t T3102) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (t *T3102) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	t.OutBlock = nil
 	for i := 0; i < int(e.GetBlockCount("t3102OutBlock")); i++ {
