@@ -49,6 +49,10 @@ func (o OK) GetOutBlock() interface{} {
 	return o.OutBlock
 }
 
+func (o OK) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (o *OK) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	o.OutBlock.Offerno1 = e.GetFieldData("OutBlock", "offerno1", 0)
 	o.OutBlock.Bidno1 = e.GetFieldData("OutBlock", "bidno1", 0)

@@ -49,6 +49,10 @@ func (n NWS) GetOutBlock() interface{} {
 	return n.OutBlock
 }
 
+func (n NWS) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (n *NWS) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	n.OutBlock.Date = e.GetFieldData("OutBlock", "date", 0)
 	n.OutBlock.Time = e.GetFieldData("OutBlock", "time", 0)

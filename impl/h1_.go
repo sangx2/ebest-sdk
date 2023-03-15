@@ -49,6 +49,10 @@ func (h H1) GetOutBlock() interface{} {
 	return h.OutBlock
 }
 
+func (h H1) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (h *H1) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	h.OutBlock.Hotime = e.GetFieldData("OutBlock", "hotime", 0)
 	h.OutBlock.Offerho1 = e.GetFieldData("OutBlock", "offerho1", 0)

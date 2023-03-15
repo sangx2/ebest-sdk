@@ -83,6 +83,10 @@ func (t T1305) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock, t.OutBlock1s}
 }
 
+func (t T1305) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (t *T1305) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	t.OutBlock.Cnt = e.GetFieldData("T1305OutBlock", "cnt", 0)
 	t.OutBlock.Date = e.GetFieldData("T1305OutBlock", "date", 0)

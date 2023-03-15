@@ -38,6 +38,10 @@ func (s SC2) GetOutBlock() interface{} {
 	return s.OutBlock
 }
 
+func (s SC2) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (s *SC2) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	s.OutBlock.Lineseq = e.GetFieldData("OutBlock", "lineseq", 0)
 	s.OutBlock.Accno = e.GetFieldData("OutBlock", "accno", 0)
