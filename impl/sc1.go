@@ -38,7 +38,7 @@ func (s SC1) GetOutBlock() interface{} {
 	return s.OutBlock
 }
 
-func (s SC1) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+func (s SC1) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
 	return e.GetBlockData(blockName)
 }
 

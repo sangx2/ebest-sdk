@@ -49,7 +49,7 @@ func (k1 K1) GetOutBlock() interface{} {
 	return k1.OutBlock
 }
 
-func (k1 K1) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+func (k1 K1) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
 	return e.GetBlockData(blockName)
 }
 

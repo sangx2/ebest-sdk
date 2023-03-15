@@ -82,7 +82,7 @@ func (c CSPAQ12200) GetOutBlocks() []interface{} {
 	return []interface{}{c.OutBlock1, c.OutBlock2}
 }
 
-func (c CSPAQ12200) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+func (c CSPAQ12200) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
 	return e.GetBlockData(blockName)
 }
 

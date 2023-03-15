@@ -81,7 +81,7 @@ func (c CSPAT00800) GetOutBlocks() []interface{} {
 	return []interface{}{c.OutBlock1, c.OutBlock2}
 }
 
-func (c CSPAT00800) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+func (c CSPAT00800) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
 	return e.GetBlockData(blockName)
 }
 

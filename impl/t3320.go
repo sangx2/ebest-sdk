@@ -78,7 +78,7 @@ func (t T3320) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock, t.OutBlock1}
 }
 
-func (t T3320) GetBlockDate(e *wrapper.EBestWrapper, blockName string) string {
+func (t T3320) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
 	return e.GetBlockData(blockName)
 }
 
