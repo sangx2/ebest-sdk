@@ -73,6 +73,11 @@ func (q *Query) GetOutBlocks() []interface{} {
 	return q.queryTrade.GetOutBlocks()
 }
 
+// GetBlockData : 블록의 데이터(값)를 취득
+func (q *Query) GetBlockData(blockName string) string {
+	return q.queryTrade.GetBlockData(q.ew, blockName)
+}
+
 // Request 조회 TR을 요청
 func (q *Query) Request(isOccurs bool) int {
 	return int(q.ew.Request(isOccurs))

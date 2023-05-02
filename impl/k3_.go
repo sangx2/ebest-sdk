@@ -49,6 +49,10 @@ func (k K3) GetOutBlock() interface{} {
 	return k.OutBlock
 }
 
+func (k K3) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (k *K3) ReceivedRealData(e *wrapper.EBestWrapper, x wrapper.XaRealReceiveRealData) {
 	k.OutBlock.Chetime = e.GetFieldData("OutBlock", "chetime", 0)
 	k.OutBlock.Sign = e.GetFieldData("OutBlock", "sign", 0)

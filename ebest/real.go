@@ -70,6 +70,11 @@ func (r *Real) GetOutBlock() interface{} {
 	return r.realTrade.GetOutBlock()
 }
 
+// GetBlockData : 블록의 데이터(값)를 취득
+func (r *Real) GetBlockData(blockName string) string {
+	return r.realTrade.GetBlockData(r.ew, blockName)
+}
+
 // GetReceivedRealDataChan 서버로부터 데이터를 수신 했을 때 발생
 func (r *Real) GetReceivedRealDataChan() chan wrapper.XaRealReceiveRealData {
 	return r.realTrade.GetReceivedRealDataChan()

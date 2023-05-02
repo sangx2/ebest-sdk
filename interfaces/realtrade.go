@@ -10,6 +10,7 @@ type RealTrade interface {
 	// in/out block
 	SetFieldData(ebest *wrapper.EBestWrapper, resPath string, inBlock interface{}) error
 	GetOutBlock() interface{}
+	GetBlockData(eBest *wrapper.EBestWrapper, blockName string) string
 
 	// callback func
 	ReceivedRealData(*wrapper.EBestWrapper, wrapper.XaRealReceiveRealData)

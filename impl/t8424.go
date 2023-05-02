@@ -76,6 +76,10 @@ func (t T8424) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock}
 }
 
+func (t T8424) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (t *T8424) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	TRcount := e.GetBlockCount("t8424OutBlock")
 

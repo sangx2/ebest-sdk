@@ -15,6 +15,7 @@ type QueryTrade interface {
 	// in/out block
 	SetFieldData(eBest *wrapper.EBestWrapper, resPath string, inBlocks ...interface{}) error
 	GetOutBlocks() []interface{}
+	GetBlockData(eBest *wrapper.EBestWrapper, blockName string) string
 
 	// callback func
 	ReceivedData(*wrapper.EBestWrapper, wrapper.XaQueryReceiveData)

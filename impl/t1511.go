@@ -76,6 +76,10 @@ func (t T1511) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock}
 }
 
+func (t T1511) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (t *T1511) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	t.OutBlock.Gubun = e.GetFieldData("t1511OutBlock", "gubun", 0)
 	t.OutBlock.Hname = e.GetFieldData("t1511OutBlock", "hname", 0)

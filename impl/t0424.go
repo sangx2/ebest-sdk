@@ -84,6 +84,10 @@ func (t T0424) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock, t.OutBlock1}
 }
 
+func (t T0424) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (t *T0424) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	t.OutBlock.Sunamt = e.GetFieldData("t0424OutBlock", "sunamt", 0)
 	t.OutBlock.Dtsunik = e.GetFieldData("t0424OutBlock", "dtsunik", 0)

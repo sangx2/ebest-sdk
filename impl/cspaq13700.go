@@ -88,6 +88,10 @@ func (c CSPAQ13700) GetOutBlocks() []interface{} {
 	return []interface{}{c.OutBlock1, c.OutBlock2, c.OutBlock3}
 }
 
+func (c CSPAQ13700) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (c *CSPAQ13700) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	c.OutBlock1.RecCnt = e.GetFieldData("CSPAQ13700OutBlock1", "RecCnt", 0)
 	c.OutBlock1.AcntNo = e.GetFieldData("CSPAQ13700OutBlock1", "AcntNo", 0)

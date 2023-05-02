@@ -78,6 +78,10 @@ func (t T3320) GetOutBlocks() []interface{} {
 	return []interface{}{t.OutBlock, t.OutBlock1}
 }
 
+func (t T3320) GetBlockData(e *wrapper.EBestWrapper, blockName string) string {
+	return e.GetBlockData(blockName)
+}
+
 func (t *T3320) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveData) {
 	t.OutBlock.Upgubunnm = e.GetFieldData("t3320OutBlock", "upgubunnm", 0)
 	t.OutBlock.Sijangcd = e.GetFieldData("t3320OutBlock", "sijangcd", 0)
