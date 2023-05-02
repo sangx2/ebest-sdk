@@ -93,6 +93,7 @@ func (t *T0424) ReceivedData(e *wrapper.EBestWrapper, x wrapper.XaQueryReceiveDa
 	t.OutBlock.Tappamt = e.GetFieldData("t0424OutBlock", "tappamt", 0)
 	t.OutBlock.Tdtsunik = e.GetFieldData("t0424OutBlock", "tdtsunik", 0)
 
+	t.OutBlock1 = nil
 	for i := 0; i < int(e.GetBlockCount("t0424OutBlock1")); i++ {
 		tr := res.T0424OutBlock1{
 			Expcode:    e.GetFieldData("t0424OutBlock1", "expcode", i),
